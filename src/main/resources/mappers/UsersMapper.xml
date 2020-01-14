@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.newdraft.mapper.UsersMapper">
+    <sql id="user">
+        user_id,user_name,user_password,user_phone,user_email,user_photo,user_wechart,user_role,user_status
+    </sql>
+    <select id="selectUsersByPhoneAndPassword" resultMap="users">
+        SELECT
+         <include refid="user"/>
+         FROM users WHERE user_phone=#{userPhone} AND user_password=#{userPassword} AND user_status='1'
+    </select>
+    <resultMap id="users" type="com.example.newdraft.model.pojo.Users">
+    <id property="userId" column="user_id"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPassword" column="user_password"/>
+        <result property="userPhone" column="user_phone"/>
+        <result property="userPhoto" column="user_photo"/>
+        <result property="userRole" column="user_role"/>
+        <result property="userWechart" column="user_wechart"/>
+        <result property="userStatus" column="user_status"/>
+    </resultMap>
+</mapper>
