@@ -26,4 +26,6 @@ public class NewdraftApplicationTests {
         Users users1 = usersMapper.selectUsersByPhoneAndPassword(users);
         System.out.println(users1);
     }
+
+
 }
