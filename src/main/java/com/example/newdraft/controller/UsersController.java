@@ -4,15 +4,20 @@ import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.pojo.Users;
 import com.example.newdraft.service.UsersService;
 import com.example.newdraft.util.DecentUtil;
+import com.example.newdraft.util.QNYUtils;
 import com.example.newdraft.util.RedisUtils;
 import com.example.newdraft.util.UserAgentUtil;
+import com.qiniu.http.Response;
+import com.qiniu.storage.model.DefaultPutRet;
 import cz.mallat.uasparser.UserAgentInfo;
 import io.swagger.annotations.*;
 import org.apache.http.HttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +44,8 @@ public class UsersController {
     private DecentUtil decentUtil;
     @Resource
     private RedisUtils redisUtils;
+    @Resource
+    private QNYUtils qnyUtils;
     @ApiOperation(value = "输入电话密码验证登录信息",notes = "正确返回用户信息，错误返回错误码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userPhone",value = "手机号",dataType = "String",example = "19919990911"),
@@ -88,6 +95,29 @@ public class UsersController {
            return  JSON.toJSONString(map);
        }
         return  JSON.toJSONString(map);
+    }
+
+
+    @RequestMapping("/usersUpload")
+    @ResponseBody
+    public String upload(@RequestParam("file") MultipartFile file) {
+        String name = file.getOriginalFilename();
+        DefaultPutRet defaultPutRet=null;
+        Map<String,Object>map=new HashMap<>();
+        try {
+            Response response = qnyUtils.upload(file.getInputStream(), name);
+            defaultPutRet = qnyUtils.defaultPutRet(response);
+        } catch (Exception e) {
+            map.put("status","failed");
+            map.put("code",4);
+            e.printStackTrace();
+        }
+        map.put("url",qnyUtils.getPath()+defaultPutRet.key);
+        if(defaultPutRet.key!=null&&defaultPutRet.key!=""){
+            map.put("status","success");
+            map.put("code",0);
+        }
+        return JSON.toJSONString(map);
     }
 
 }
