@@ -12,4 +12,10 @@ public interface NewsService {
      * @return
      */
     List<News> inquiryAllNews(Map<String,Object> map);
+    /**
+     * 根据新闻id 查询新闻详细信息
+     * @param id
+     * @return
+     */
+    News inquiryByNewsId(int id);
 }

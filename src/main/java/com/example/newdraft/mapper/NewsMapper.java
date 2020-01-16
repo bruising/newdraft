@@ -13,4 +13,11 @@ public interface NewsMapper {
      * @return
      */
     List<News> selectAllNews(Map<String,Object> map);
+
+    /**
+     * 根据id查询新闻详细信息
+     * @param id
+     * @return
+     */
+    News selectByNewsId(int id);
 }

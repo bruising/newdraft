@@ -21,4 +21,13 @@ public class NewsServiceImpl implements NewsService {
             return newsList;
         }
     }
+
+    @Override
+    public News inquiryByNewsId(int id) {
+        News news = newsMapper.selectByNewsId(id);
+        if(null == news ){
+            return null;
+        }
+        return news;
+    }
 }

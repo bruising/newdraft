@@ -19,6 +19,13 @@ import java.util.Map;
 public class NewsController {
     @Resource
     private NewsService newsService;
+
+    /**
+     * 查询显示新闻信息按点击量排序
+     * @param index
+     * @param limit
+     * @return
+     */
     @ApiOperation(value = "查询显示新闻信息按点击量排序",notes = "正确返回信息信息,错误返回错误码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "index",value = "页数",dataType = "String",example = "1"),
@@ -45,4 +52,34 @@ public class NewsController {
         }
         return message;
     }
+
+    /**
+     * 根据id查询新闻详细信息
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "根据id查询新闻详细信息",notes = "正确返回信息信息,错误返回错误码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "新闻id",dataType = "String",example = "1")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success")
+    })
+    @PostMapping("/QueryByID")
+    public Message QueryByID(@RequestParam("id")int id){
+        News news = newsService.inquiryByNewsId(id);
+        Message message = new Message();
+        if(null == news){
+            message.setCode("4");
+            message.setMsg("failed");
+        }else{
+            message.setCode("0");
+            message.setMsg("success");
+            message.setData(JSON.toJSONString(news));
+        }
+        return message;
+    }
 }
+
+

@@ -4,9 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newdraft.mapper.NewsMapper">
     <select id="selectAllNews" resultType="com.example.newdraft.model.pojo.News">
-        select * from news order by news_index asc limit #{index},#{limit}
+       select * from news order by news_level desc,news_index desc limit #{index},#{limit}
     </select>
-
+    <select id="selectByNewsId" resultType="com.example.newdraft.model.pojo.News">
+        select * from news where news_id=#{id}
+    </select>
 
 
 </mapper>
