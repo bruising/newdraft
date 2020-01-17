@@ -97,27 +97,38 @@ public class UsersController {
         return  JSON.toJSONString(map);
     }
 
-
-    @RequestMapping("/usersUpload")
+    @ApiOperation(value = "头像上传",notes = "token验证")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file",value = "头像",dataType = "MultipartFile"),
+            @ApiImplicitParam(name = "token",value = "请求所携带token",dataType = "String")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success")
+    })
+    @RequestMapping(value = "/usersUpload",method = RequestMethod.POST)
     @ResponseBody
-    public String upload(@RequestParam("file") MultipartFile file) {
-        String name = file.getOriginalFilename();
-        DefaultPutRet defaultPutRet=null;
-        Map<String,Object>map=new HashMap<>();
-        try {
-            Response response = qnyUtils.upload(file.getInputStream(), name);
-            defaultPutRet = qnyUtils.defaultPutRet(response);
-        } catch (Exception e) {
-            map.put("status","failed");
-            map.put("code",4);
-            e.printStackTrace();
-        }
-        map.put("url",qnyUtils.getPath()+defaultPutRet.key);
-        if(defaultPutRet.key!=null&&defaultPutRet.key!=""){
-            map.put("status","success");
-            map.put("code",0);
-        }
-        return JSON.toJSONString(map);
+    public String upload(@RequestParam("file") MultipartFile file,String token) {
+       if(redisUtils.judgeToken(token)){
+           String name = file.getOriginalFilename();
+           DefaultPutRet defaultPutRet=null;
+           Map<String,Object>map=new HashMap<>();
+           try {
+               Response response = qnyUtils.upload(file.getInputStream(), name);
+               defaultPutRet = qnyUtils.defaultPutRet(response);
+           } catch (Exception e) {
+               map.put("status","failed");
+               map.put("code",4);
+               e.printStackTrace();
+           }
+           map.put("url",qnyUtils.getPath()+defaultPutRet.key);
+           if(defaultPutRet.key!=null&&defaultPutRet.key!=""){
+               map.put("status","success");
+               map.put("code",0);
+           }
+           return JSON.toJSONString(map);
+       }
+        return  JSON.toJSONString(new HashMap<String,Object>());
     }
 
 }

@@ -54,7 +54,7 @@ public class UsersServiceImpl implements UsersService {
             redisUtils.delete(tokenKey);
             redisUtils.delete(tokenValue);
         }
-        redisUtils.set(tokenKey,token,300);
+        redisUtils.set(tokenKey,token);
         redisUtils.set(token, JSON.toJSONString(user1));
     }
     //创建token

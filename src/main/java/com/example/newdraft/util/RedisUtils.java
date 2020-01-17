@@ -35,6 +35,16 @@ public class RedisUtils {
        return vo.get(key);
     }
 
+    public boolean judgeToken(String key){
+        Object o = get(key);
+        if(o==null||o==""){
+            return false;
+        }
+        return true;
+    }
+
+
+
     /**
      * 删除
      * @param key
