@@ -2,26 +2,26 @@ package com.example.newdraft.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.pojo.Users;
+import com.example.newdraft.model.vo.UserMessage;
 import com.example.newdraft.service.UsersService;
-import com.example.newdraft.util.DecentUtil;
-import com.example.newdraft.util.QNYUtils;
-import com.example.newdraft.util.RedisUtils;
-import com.example.newdraft.util.UserAgentUtil;
+import com.example.newdraft.util.*;
 import com.qiniu.http.Response;
 import com.qiniu.storage.model.DefaultPutRet;
 import cz.mallat.uasparser.UserAgentInfo;
 import io.swagger.annotations.*;
+
 import org.apache.http.HttpResponse;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -33,7 +33,7 @@ import java.util.Random;
  * @Description:
  * @date 2020/1/14 星期二 19:33
  */
-@Controller
+@RestController
 @Api(tags="这是吴成卓写的类")
 public class UsersController {
     @Resource
@@ -129,6 +129,40 @@ public class UsersController {
            return JSON.toJSONString(map);
        }
         return  JSON.toJSONString(new HashMap<String,Object>());
+    }
+
+
+    @ApiOperation(value = "根据昵称、手机号、邮箱模糊查找",notes = "查询成功返回用户数据，失败返回字符串")
+    @ApiImplicitParams({
+
+           @ApiImplicitParam(name ="username",value = "昵称",dataType ="Users",example = "用户"),
+            @ApiImplicitParam(name ="userPhone",value = "手机号",dataType ="Users",example = "177"),
+            @ApiImplicitParam(name ="userEmail",value = "邮箱",dataType ="Users",example = "741")
+
+   })
+    @ApiResponses({
+            @ApiResponse(code = 101,message = "没有找到符合条件的信息"),
+            @ApiResponse(code = 102,message = "找到符合条件的信息")
+    })
+    @RequestMapping(value = "/queryUserByNameAndPhoneAndEmail",method = RequestMethod.POST)
+    public   UserMessage  queryUserByNameAndPhoneAndEmail(
+             @Valid Users  users,
+            @RequestParam(value = "currentPage",required = false,defaultValue = "1")int currentPage,
+            @RequestParam(value = "rows",required = false,defaultValue = "1")int rows, Model  model){
+        System.out.println(users);
+           PageBean<Users>pb=usersService.queryUserByNameandPhoneandEmailandPage(users,currentPage,rows);
+        System.out.println(pb);
+           model.addAttribute("pb",pb);
+           UserMessage  um=new UserMessage();
+           if(pb.getList().size()<0){//没有找到符合条件的数据
+               um.setCode("101");
+               um.setMsg("没有找到符合条件的用户");
+           }else {
+               um.setCode("102");
+               um.setMsg("为您找到"+pb.getList().size()+"条数据");
+               um.setData(JSON.toJSONString(pb.getList()));
+           }
+        return um;
     }
 
 }

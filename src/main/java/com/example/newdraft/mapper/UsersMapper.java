@@ -2,6 +2,9 @@ package com.example.newdraft.mapper;
 
 import com.example.newdraft.model.pojo.Users;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author 吴成卓
@@ -19,4 +22,16 @@ public interface UsersMapper {
      * @return
      */
     Users selectUsersByPhoneAndPassword(Users users);
+
+    /**
+     * 查询用户  通过昵称  手机号   邮箱模糊查询
+     * @return
+     */
+    List<Users>queryUserByNameandPhoneandEmail(@Param("users1") Users  users,@Param("start") int  currentPage,@Param("rows") int rows);
+
+    /**
+     * 查询符合条件的总记录数
+     * @return
+     */
+    int   queryUserByNameandPhoneandEmailCount(Users  users);
 }

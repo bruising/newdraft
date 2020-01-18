@@ -2,9 +2,11 @@ package com.example.newdraft.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.pojo.News;
+import com.example.newdraft.model.pojo.Users;
 import com.example.newdraft.model.vo.Message;
 import com.example.newdraft.service.NewsService;
 import io.swagger.annotations.*;
+import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

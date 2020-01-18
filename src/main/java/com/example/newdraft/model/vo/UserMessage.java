@@ -1,12 +1,18 @@
 package com.example.newdraft.model.vo;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
-@Data
-@ApiModel(description = "返回对象的信息")
-public class Message {
+/**
+ * @author 王青
+ * @version V1.0
+ * @Project: newdraft
+ * @Package com.example.newdraft.model.vo
+ * @date 2020/1/17 21:20 星期五
+ */
+@ApiModel(description = "这是返回的对象数据")
+public class UserMessage {
     @ApiModelProperty(value = "状态码")
     private String code;
     @ApiModelProperty(value = "返回携带的信息")
@@ -37,4 +43,5 @@ public class Message {
     public void setData(String data) {
         this.data = data;
     }
+
 }

@@ -12,7 +12,8 @@
          FROM users WHERE user_phone=#{userPhone} AND user_password=#{userPassword} AND user_status='1'
     </select>
     <resultMap id="users" type="com.example.newdraft.model.pojo.Users">
-    <id property="userId" column="user_id"/>
+    <id property="id" column="id"/>
+        <result property="userId"  column="user_id"/>
         <result property="userEmail" column="user_email"/>
         <result property="userName" column="user_name"/>
         <result property="userPassword" column="user_password"/>
@@ -22,4 +23,27 @@
         <result property="userWechart" column="user_wechart"/>
         <result property="userStatus" column="user_status"/>
     </resultMap>
+
+
+    <select id="queryUserByNameandPhoneandEmail"  parameterType="com.example.newdraft.model.pojo.Users" resultMap="users">
+        SELECT * FROM `users`
+        <where>
+            <if  test="users1.userName != null and users1.userName != ''">
+                AND   user_name  LIKE   "%"#{users1.userName}"%"
+            </if>
+            <if  test="users1.userPhone != null  and  users1.userPhone != ''">
+                AND  user_phone  LIKE "%"#{users1.userPhone}"%"
+
+            </if>
+            <if  test="users1.userEmail !=null  and  users1.userEmail !=''">
+                AND  user_email LIKE  "%"#{users1.userEmail}"%"
+
+            </if>
+            AND  user_role in(0,1) LIMIT #{start},#{rows}
+        </where>
+    </select>
+
+    <select id="queryUserByNameandPhoneandEmailCount"  resultType="int">
+        SELECT COUNT(*) FROM `users`  WHERE  user_name  LIKE  "%"#{userName}"%" and  user_phone  LIKE "%"#{userPhone}"%"  AND  user_email LIKE  "%"#{userEmail}"%" AND  user_role in(1,2);
+    </select>
 </mapper>

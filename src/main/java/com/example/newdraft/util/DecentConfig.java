@@ -20,4 +20,36 @@ public class DecentConfig {
    private String path = "/dx/sendSms";
    private String method = "POST";
    private String appcode;
+
+   public String getHost() {
+      return host;
+   }
+
+   public void setHost(String host) {
+      this.host = host;
+   }
+
+   public String getPath() {
+      return path;
+   }
+
+   public void setPath(String path) {
+      this.path = path;
+   }
+
+   public String getMethod() {
+      return method;
+   }
+
+   public void setMethod(String method) {
+      this.method = method;
+   }
+
+   public String getAppcode() {
+      return appcode;
+   }
+
+   public void setAppcode(String appcode) {
+      this.appcode = appcode;
+   }
 }

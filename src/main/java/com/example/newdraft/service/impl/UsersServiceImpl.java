@@ -5,6 +5,7 @@ import com.example.newdraft.mapper.UsersMapper;
 import com.example.newdraft.model.pojo.Users;
 import com.example.newdraft.service.UsersService;
 import com.example.newdraft.util.MD5;
+import com.example.newdraft.util.PageBean;
 import com.example.newdraft.util.RedisUtils;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,6 +48,29 @@ public class UsersServiceImpl implements UsersService {
         }
         return map;
     }
+
+    @Override
+    public PageBean<Users> queryUserByNameandPhoneandEmailandPage(Users  users,int currentPage, int rows) {
+        //创建一个空的pageBean对象
+        PageBean<Users>pb=new PageBean<>();
+        //设置当前第几页  和每页显示的条数
+        pb.setCurrentPage(currentPage);
+        pb.setRows(rows);
+        //使用Dao层查询符合条件的数据
+        int totalCount=usersMapper.queryUserByNameandPhoneandEmailCount(users);
+        pb.setTotalCount(totalCount);
+       //计算开始的索引
+        int  start=(currentPage-1)*rows;
+        //每页显示的记录数
+        List<Users>list= usersMapper.queryUserByNameandPhoneandEmail(users,start,rows);
+        pb.setList(list);
+        //查询总页码
+        int  totalPage=totalCount%rows==0?(totalCount/rows):totalCount/rows+1;
+        pb.setTotalPage(totalPage);
+        return pb;
+    }
+
+
     //存放token
     private void saveToken(Users user1, String token) {
         String tokenKey="User"+user1.getUserId();
