@@ -46,6 +46,10 @@ public class Programs {
     * 联系方式
     */
     private String programPhone;
+    /**
+     * 优先级默认为1，越高越优先
+     */
+    private String programLevel;
 
     /**
     * 1：正常，2：已下架

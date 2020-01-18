@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.newdraft.mapper.ProgramsMapper">
+    <insert id="addPrograms" >
+        insert into programs value(null,#{programs.programTitle},#{programs.country},#{programs.programInfo},#{programs.programRequire},#{programs.programPhone},#{programs.programLevel},#{programs.programStatus})
+    </insert>
+
+    <update id="updatePrograms">
+        update programs set program_title=#{programs.programTitle},country=#{programs.country},program_info=#{programs.programInfo},program_require=#{programs.programRequire},program_phone=#{programs.programPhone},program_level=#{programs.programLevel},program_status=#{programs.programStatus} where program_id=#{programs.programId}
+    </update>
+
+    <select id="getProgramsById" resultMap="programs">
+        select * from programs where program_id =#{id}
+    </select>
+
+    <resultMap id="programs" type="com.example.newdraft.model.pojo.Programs">
+        <id property="programId" column="program_id"></id>
+        <result property="programTitle" column="program_title"></result>
+        <result property="country" column="country"></result>
+        <result property="programInfo" column="program_info"></result>
+        <result property="programRequire" column="program_require"></result>
+        <result property="programPhone" column="program_phone"></result>
+        <result property="programLevel" column="program_level"></result>
+        <result property="programStatus" column="program_status"></result>
+    </resultMap>
+</mapper>
