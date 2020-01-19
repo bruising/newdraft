@@ -53,16 +53,21 @@ public class UsersServiceImpl implements UsersService {
     public PageBean<Users> queryUserByNameandPhoneandEmailandPage(Users  users,int currentPage, int rows) {
         //创建一个空的pageBean对象
         PageBean<Users>pb=new PageBean<>();
+        System.out.println("service层=======");
         //设置当前第几页  和每页显示的条数
         pb.setCurrentPage(currentPage);
         pb.setRows(rows);
         //使用Dao层查询符合条件的数据
         int totalCount=usersMapper.queryUserByNameandPhoneandEmailCount(users);
+        System.out.println(totalCount+"totalCount");
         pb.setTotalCount(totalCount);
        //计算开始的索引
         int  start=(currentPage-1)*rows;
+        System.out.println(start);
+        System.out.println(rows);
         //每页显示的记录数
         List<Users>list= usersMapper.queryUserByNameandPhoneandEmail(users,start,rows);
+        System.out.println("list======"+list);
         pb.setList(list);
         //查询总页码
         int  totalPage=totalCount%rows==0?(totalCount/rows):totalCount/rows+1;
