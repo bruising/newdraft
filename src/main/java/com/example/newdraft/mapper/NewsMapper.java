@@ -1,7 +1,9 @@
 package com.example.newdraft.mapper;
 
 import com.example.newdraft.model.pojo.News;
+import com.example.newdraft.model.vo.NewsList;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -20,4 +22,25 @@ public interface NewsMapper {
      * @return
      */
     News selectByNewsId(int id);
+
+    /**
+     * 后台显示新闻列表
+     * @param map
+     * @return
+     */
+    List<NewsList> selectAllNewsList(@Param("map") Map<String,Object>map);
+
+    /**
+     *条数
+     * @param map
+     * @return
+     */
+    Long selectAllNewsListCont(@Param("map") Map<String,Object>map);
+
+    /**
+     * 修改权重
+     * @param news
+     * @return
+     */
+    int updateNewsLevel(News news);
 }
