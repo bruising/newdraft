@@ -59,4 +59,22 @@ public class NewsServiceImpl implements NewsService {
         }
         return false;
     }
+
+    @Override
+    public boolean del(News news) {
+        int i = newsMapper.delNews(news);
+        if(i>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean shang(News news) {
+        int i = newsMapper.shang(news);
+        if(i>0){
+            return true;
+        }
+        return false;
+    }
 }

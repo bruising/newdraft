@@ -32,4 +32,18 @@ public interface NewsService {
      * @return
      */
     boolean updateNewsLevel(News news);
+
+    /**
+     * 下架新闻
+     * @param news
+     * @return
+     */
+    boolean del(News news);
+
+    /**
+     * 上架新闻
+     * @param news
+     * @return
+     */
+    boolean shang(News news);
 }
