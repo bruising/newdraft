@@ -18,4 +18,18 @@ public interface NewsService {
      * @return
      */
     News inquiryByNewsId(int id);
+
+    /**
+     * 后台新闻列表
+     * @param map
+     * @return
+     */
+    Map<String,Object>queryNewsList(Map<String,Object>map);
+
+    /**
+     * 修改权重
+     * @param news
+     * @return
+     */
+    boolean updateNewsLevel(News news);
 }

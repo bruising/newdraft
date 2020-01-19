@@ -9,6 +9,51 @@
     <select id="selectByNewsId" resultType="com.example.newdraft.model.pojo.News">
         select * from news where news_id=#{id}
     </select>
+    <select id="selectAllNewsList" resultMap="newsList">
+        select news_id,news_title,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
+        users ON users.user_id=news.news_owner
+        <where>
+            <if test="map.news_status!=0">
+                and news_status=#{map.news_status}
+            </if>
+            <if test="map.userName!=''">
+                and user_name=#{map.userName}
+            </if>
+            <if test="map.news_title!=''">
+                and news_title like CONCAT('%',#{map.news_title},'%')
+            </if>
+        </where>
+        limit #{map.index},#{map.limit}
+    </select>
+    <resultMap id="newsList" type="com.example.newdraft.model.vo.NewsList">
+        <id property="news_id" column="news_id"/>
+        <result property="news_title" column="news_title"/>
+        <result property="news_type" column="news_type"/>
+        <result property="userName" column="user_name"/>
+        <result property="news_createTime" column="news_createTime"/>
+        <result property="news_verifiedTime" column="news_verifiedTime"/>
+        <result property="news_updatedTime" column="news_updatedTime"/>
+        <result property="news_level" column="news_level"/>
+        <result property="news_status" column="news_status"/>
+    </resultMap>
+    <select id="selectAllNewsListCont" resultType="java.lang.Long">
+        select count(*) FROM news INNER JOIN
+        users ON users.user_id=news.news_owner
+        <where>
+            <if test="map.news_status!=0">
+                and news_status=#{map.news_status}
+            </if>
+            <if test="map.userName!=''">
+                and user_name=#{map.userName}
+            </if>
+            <if test="map.news_title!=''">
+                and news_title like CONCAT('%',#{map.news_title},'%')
+            </if>
+        </where>
+    </select>
+    <update id="updateNewsLevel">
+        update news set news_level=#{news_level} where news_id=#{news_id}
+    </update>
 
 
 </mapper>
