@@ -27,7 +27,7 @@ public interface UsersMapper {
      * 查询用户  通过昵称  手机号   邮箱模糊查询
      * @return
      */
-    List<Users>queryUserByNameandPhoneandEmail(@Param("users1") Users  users,@Param("start") int  currentPage,@Param("rows") int rows);
+    List<Users>queryUserByNameandPhoneandEmail(@Param("users1") Users  users1,@Param("start") int  currentPage,@Param("rows") int rows);
 
     /**
      * 查询符合条件的总记录数

@@ -13,15 +13,15 @@ public class Users {
   //用户id
   private Integer userId;
   //昵称
-  @NotBlank
+
   private String userName;
   //密码
   private String userPassword;
   //电话
-  @NotBlank
+
   private String userPhone;
   //邮箱
-  @NotBlank
+
   private String userEmail;
   //头像地址
   private String userPhoto;

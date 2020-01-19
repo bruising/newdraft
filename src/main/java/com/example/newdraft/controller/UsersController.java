@@ -146,9 +146,9 @@ public class UsersController {
     })
     @RequestMapping(value = "/queryUserByNameAndPhoneAndEmail",method = RequestMethod.POST)
     public   UserMessage  queryUserByNameAndPhoneAndEmail(
-             @Valid Users  users,
+             @RequestParam(value = "user",required = false) Users  users,
             @RequestParam(value = "currentPage",required = false,defaultValue = "1")int currentPage,
-            @RequestParam(value = "rows",required = false,defaultValue = "1")int rows, Model  model){
+            @RequestParam(value = "rows",required = false,defaultValue = "2")int rows, Model  model){
         System.out.println(users);
            PageBean<Users>pb=usersService.queryUserByNameandPhoneandEmailandPage(users,currentPage,rows);
         System.out.println(pb);
