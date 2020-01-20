@@ -43,4 +43,18 @@ public interface NewsMapper {
      * @return
      */
     int updateNewsLevel(News news);
+
+    /**
+     * 下架新闻
+     * @param news
+     * @return
+     */
+    int delNews(News news);
+
+    /**
+     * 上架新闻
+     * @param news
+     * @return
+     */
+    int shang(News news);
 }

@@ -54,6 +54,12 @@
     <update id="updateNewsLevel">
         update news set news_level=#{news_level} where news_id=#{news_id}
     </update>
+    <update id="delNews">
+        update news set news_status=3 where news_id=#{news_id}
+    </update>
+    <update id="shang">
+        update news set news_status=1 where news_id=#{news_id}
+    </update>
 
 
 </mapper>

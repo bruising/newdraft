@@ -193,6 +193,77 @@ public class NewsController {
         }
         return JSON.toJSONString(message);
     }
+
+    /**
+     * 新闻下架
+     * @param news
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "新闻下架",notes = "成功返回状态码0")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "news_id",value = "新闻id",dataType = "Integer",example = "1"),
+            @ApiImplicitParam(name = "token",value = "token验证",dataType = "String")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success"),
+            @ApiResponse(code = 5,message = "noToken")
+    })
+    @RequestMapping(value = "/delNews",method = RequestMethod.POST)
+    @ResponseBody
+    public String delNews(News news,String token){
+        Message message = new Message();
+        if(redisUtils.judgeToken(token)){
+            if(newsService.del(news)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
+        }else{
+            message.setCode("5");
+            message.setMsg("noToken");
+        }
+        return JSON.toJSONString(message);
+    }
+
+
+    /**
+     * 新闻上架
+     * @param news
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "新闻上架",notes = "成功返回状态码0")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "news_id",value = "新闻id",dataType = "Integer",example = "1"),
+            @ApiImplicitParam(name = "token",value = "token验证",dataType = "String")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success"),
+            @ApiResponse(code = 5,message = "noToken")
+    })
+    @RequestMapping(value = "/shang",method = RequestMethod.POST)
+    @ResponseBody
+    public String shang(News news,String token){
+        Message message = new Message();
+        if(redisUtils.judgeToken(token)){
+            if(newsService.shang(news)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
+        }else{
+            message.setCode("5");
+            message.setMsg("noToken");
+        }
+        return JSON.toJSONString(message);
+    }
 }
 
 
