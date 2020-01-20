@@ -35,4 +35,17 @@ public interface UsersService {
      * @return
      */
     PageBean<Users>queryUserByNameandPhoneandEmailandPage(Users  users,int currentPage,int  rows);
+    /**
+     * 根据用户id删除
+     * @param id
+     * @return
+     */
+    int  deleteById(int id);
+
+    /***
+     * 根据id 查找用户
+     * @param id
+     * @return
+     */
+    Users findById(int id);
 }

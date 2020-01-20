@@ -10,6 +10,7 @@ import com.qiniu.storage.model.DefaultPutRet;
 import cz.mallat.uasparser.UserAgentInfo;
 import io.swagger.annotations.*;
 
+import org.apache.catalina.User;
 import org.apache.http.HttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -149,9 +150,9 @@ public class UsersController {
             @Valid Users  users,
             @RequestParam(value = "currentPage",required = false,defaultValue = "1")int currentPage,
             @RequestParam(value = "rows",required = false,defaultValue = "1")int rows, Model  model){
-        System.out.println(users);
+
            PageBean<Users>pb=usersService.queryUserByNameandPhoneandEmailandPage(users,currentPage,rows);
-        System.out.println(pb);
+
            model.addAttribute("pb",pb);
            UserMessage  um=new UserMessage();
            if(pb.getList().size()<0){//没有找到符合条件的数据
@@ -164,4 +165,43 @@ public class UsersController {
            }
         return um;
     }
+    @ApiOperation(value = "根据id删除",notes = "成功返回101  失败返回102")
+    @ApiResponses({@ApiResponse(code = 101,message = "删除成功"),
+                  @ApiResponse(code = 102,message = "删除失败")})
+    @ApiImplicitParam(name = "id",value = "id",dataType = "int",example = "1")
+    @PostMapping("/deleteById")
+    public   UserMessage deleteById(int id){
+        int i=usersService.deleteById(id);
+        UserMessage  um=new UserMessage();
+        if(i>0){
+            um.setMsg("101");
+            um.setMsg("删除成功");
+        }else {
+            um.setCode("102");
+            um.setMsg("删除失败");
+        }
+
+        return   um;
+    }
+
+    @ApiOperation(value = "根据id查找",notes = "成功返回101  失败返回102")
+    @ApiResponses({@ApiResponse(code = 101,message = "查找成功"),
+            @ApiResponse(code = 102,message = "查找失败")})
+    @ApiImplicitParam(name = "id",value = "id",dataType = "int",example = "1")
+    @PostMapping("/findById")
+    public   UserMessage   findById(int  id){
+       Users  user= usersService.findById(id);
+        UserMessage  um=new UserMessage();
+        if (user!=null){
+            um.setCode("101");
+            um.setMsg("查找成功");
+            um.setData(JSON.toJSONString(user));
+        }else {
+            um.setCode("102");
+            um.setMsg("查找失败");
+        }
+    return um;
+    }
+
+
 }

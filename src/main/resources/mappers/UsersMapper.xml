@@ -62,4 +62,11 @@
             AND  user_role in(1,2)
         </where>
     </select>
+    <update id="deleteById">
+       UPDATE  users  SET  user_status=0  WHERE  id =#{id}
+    </update>
+
+    <select id="findById"  resultMap="users">
+       SELECT  * FROM users   WHERE   id=#{id}
+    </select>
 </mapper>

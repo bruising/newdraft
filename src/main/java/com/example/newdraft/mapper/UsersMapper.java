@@ -34,4 +34,18 @@ public interface UsersMapper {
      * @return
      */
     int   queryUserByNameandPhoneandEmailCount(Users  users);
+
+    /**
+     * 根据用户id删除
+     * @param id
+     * @return
+     */
+    int  deleteById(int id);
+
+    /**
+     * 根据id查询用户
+     * @param id
+     * @return
+     */
+    Users findById(int id);
 }
