@@ -77,4 +77,19 @@ public class NewsServiceImpl implements NewsService {
         }
         return false;
     }
+
+    @Override
+    public boolean add(News news) {
+        int i = newsMapper.add(news);
+        if(i>0){
+            return true;
+        }
+        return false;
+
+    }
+
+    @Override
+    public News queryNewsById(News news) {
+      return newsMapper.selectByNewsId(news.getNews_id());
+    }
 }

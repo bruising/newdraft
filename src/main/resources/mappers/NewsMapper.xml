@@ -11,7 +11,7 @@
     </select>
     <select id="selectAllNewsList" resultMap="newsList">
         select news_id,news_title,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
-        users ON users.user_id=news.news_owner
+        users ON users.id=news.news_owner
         <where>
             <if test="map.news_status!=0">
                 and news_status=#{map.news_status}
@@ -60,6 +60,9 @@
     <update id="shang">
         update news set news_status=1 where news_id=#{news_id}
     </update>
+    <insert id="add">
+        insert into news(news_title,news_text,news_type,news_owner,news_createTime,news_verifiedTime,news_status)values (#{news_title},#{news_text},2,#{news_owner},SYSDATE(),SYSDATE(),1)
+    </insert>
 
 
 </mapper>

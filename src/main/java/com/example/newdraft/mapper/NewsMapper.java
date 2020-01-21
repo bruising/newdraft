@@ -57,4 +57,12 @@ public interface NewsMapper {
      * @return
      */
     int shang(News news);
+
+    /**
+     * 管理员发布新闻
+     * @param news
+     * @return
+     */
+    int add(News news);
+
 }
