@@ -264,6 +264,62 @@ public class NewsController {
         }
         return JSON.toJSONString(message);
     }
+
+    /**
+     * 管理员发布新闻
+     * @param news
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @ResponseBody
+    public String add(News news,String token){
+        System.out.println(news);
+        Message message = new Message();
+        if(redisUtils.judgeToken(token)){
+            if(newsService.add(news)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
+        }else{
+            message.setCode("5");
+            message.setMsg("noToken");
+        }
+        return JSON.toJSONString(message);
+    }
+
+
+    /**
+     * 查看某个新闻
+     * @param news
+     * @param token
+     * @return
+     */
+    @RequestMapping(value = "/queryNewById",method = RequestMethod.POST)
+    @ResponseBody
+    public String queryNewById(News news,String token){
+        System.out.println(news);
+        Message message = new Message();
+        if(redisUtils.judgeToken(token)){
+            News news1 = newsService.queryNewsById(news);
+            if(news1!=null){
+                System.out.println(news1);
+                message.setCode("0");
+                message.setMsg("success");
+                message.setData(news1.getNews_text());
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
+        }else{
+            message.setCode("5");
+            message.setMsg("noToken");
+        }
+        return JSON.toJSONString(message);
+    }
 }
 
 

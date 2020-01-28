@@ -46,4 +46,18 @@ public interface NewsService {
      * @return
      */
     boolean shang(News news);
+
+    /**
+     * 管理员发布新闻
+     * @param news
+     * @return
+     */
+    boolean add(News news);
+
+    /**
+     * 查询新闻详细信息
+     * @param news
+     * @return
+     */
+    News queryNewsById(News news);
 }

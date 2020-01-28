@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newdraft.mapper.UsersMapper">
     <sql id="user">
-        user_id,user_name,user_password,user_phone,user_email,user_photo,user_wechart,user_role,user_status
+        id,user_id,user_name,user_password,user_phone,user_email,user_photo,user_wechart,user_role,user_status
     </sql>
     <select id="selectUsersByPhoneAndPassword" resultMap="users">
         SELECT
@@ -13,6 +13,7 @@
     </select>
     <resultMap id="users" type="com.example.newdraft.model.pojo.Users">
     <id property="id" column="id"/>
+        <id property="id" column="id"/>
         <result property="userId"  column="user_id"/>
         <result property="userEmail" column="user_email"/>
         <result property="userName" column="user_name"/>
