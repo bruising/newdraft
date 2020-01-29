@@ -1,6 +1,5 @@
 package com.example.newdraft.model.vo;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,11 +18,18 @@ public class UserMessage {
     private String msg;
     @ApiModelProperty(value = "返回JSON字符串信息")
     private String data;
-
+    @ApiModelProperty(value = "数量")
+    private Integer count;
     public String getCode() {
         return code;
     }
+    public Integer getCount() {
+        return count;
+    }
 
+    public void setCount(Integer count) {
+        this.count = count;
+    }
     public void setCode(String code) {
         this.code = code;
     }

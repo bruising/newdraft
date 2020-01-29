@@ -2,26 +2,23 @@ package com.example.newdraft.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.pojo.Users;
-import com.example.newdraft.model.vo.UserMessage;
+import com.example.newdraft.model.vo.Message;
 import com.example.newdraft.service.UsersService;
-import com.example.newdraft.util.*;
+import com.example.newdraft.util.DecentUtil;
+import com.example.newdraft.util.QNYUtils;
+import com.example.newdraft.util.RedisUtils;
+import com.example.newdraft.util.UserAgentUtil;
 import com.qiniu.http.Response;
 import com.qiniu.storage.model.DefaultPutRet;
 import cz.mallat.uasparser.UserAgentInfo;
 import io.swagger.annotations.*;
-
 import org.apache.http.HttpResponse;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -84,7 +81,7 @@ public class UsersController {
     @ResponseBody
     public String message(String phone)throws Exception{
         String code = String.valueOf(new Random().nextInt(899999) + 100000);
-        HttpResponse response = decentUtil.response( phone, code);
+        HttpResponse response = decentUtil.response(phone, code);
         Map<Object, Object> map = new HashMap<>();
         map.put("code",4);
         map.put("msg","failed");
@@ -131,38 +128,103 @@ public class UsersController {
         return  JSON.toJSONString(new HashMap<String,Object>());
     }
 
-
-    @ApiOperation(value = "根据昵称、手机号、邮箱模糊查找",notes = "查询成功返回用户数据，失败返回字符串")
-    @ApiImplicitParams({
-
-           @ApiImplicitParam(name ="username",value = "昵称",dataType ="Users",example = "用户"),
-            @ApiImplicitParam(name ="userPhone",value = "手机号",dataType ="Users",example = "177"),
-            @ApiImplicitParam(name ="userEmail",value = "邮箱",dataType ="Users",example = "741")
-
-   })
-    @ApiResponses({
-            @ApiResponse(code = 101,message = "没有找到符合条件的信息"),
-            @ApiResponse(code = 102,message = "找到符合条件的信息")
-    })
-    @RequestMapping(value = "/queryUserByNameAndPhoneAndEmail",method = RequestMethod.POST)
-    public   UserMessage  queryUserByNameAndPhoneAndEmail(
-             @Valid Users  users,
-            @RequestParam(value = "currentPage",required = false,defaultValue = "1")int currentPage,
-            @RequestParam(value = "rows",required = false,defaultValue = "1")int rows, Model  model){
-        System.out.println(users);
-           PageBean<Users>pb=usersService.queryUserByNameandPhoneandEmailandPage(users,currentPage,rows);
-        System.out.println(pb);
-           model.addAttribute("pb",pb);
-           UserMessage  um=new UserMessage();
-           if(pb.getList().size()<0){//没有找到符合条件的数据
-               um.setCode("101");
-               um.setMsg("没有找到符合条件的用户");
-           }else {
-               um.setCode("102");
-               um.setMsg("为您找到"+pb.getList().size()+"条数据");
-               um.setData(JSON.toJSONString(pb.getList()));
-           }
-        return um;
+    @RequestMapping("/queryUser")
+    @ResponseBody
+    public String queryUser( @RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
+                             @RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                             Users users){
+        Map<String, Object> map = new HashMap<>();
+        map.put("limit",limit);
+        map.put("page",page);
+        map.put("users",users);
+        Map<String, Object> map1 = usersService.queryUsersList(map);
+        System.out.println(JSON.toJSONString(map1));
+        return JSON.toJSONString(map1);
     }
 
+
+    /**
+     * 停用   用户
+     * @param
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "停用用户",notes = "成功返回状态码0")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "用户id",dataType = "Integer",example = "1"),
+            @ApiImplicitParam(name = "token",value = "token验证",dataType = "String")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success"),
+            @ApiResponse(code = 5,message = "noToken")
+    })
+    @RequestMapping(value = "/delUsers",method = RequestMethod.POST)
+    @ResponseBody
+    public String delUsers(Integer id, String token){
+        Message message = new Message();
+        if(redisUtils.judgeToken(token)){
+            if(usersService.del(id)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
+        }else{
+            message.setCode("5");
+            message.setMsg("noToken");
+        }
+        return JSON.toJSONString(message);
+    }
+
+    /**
+     * 修改用户状态为正常
+     * @param
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "修改用户状态为正常",notes = "成功返回状态码0")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "用户id",dataType = "Integer",example = "1"),
+            @ApiImplicitParam(name = "token",value = "token验证",dataType = "String")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success"),
+            @ApiResponse(code = 5,message = "noToken")
+    })
+    @RequestMapping(value = "/qiyong",method = RequestMethod.POST)
+    @ResponseBody
+    public String qiyong(Integer id, String token){
+        Message message = new Message();
+        if(redisUtils.judgeToken(token)){
+            if(usersService.qiyong(id)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
+        }else{
+            message.setCode("5");
+            message.setMsg("noToken");
+        }
+        return JSON.toJSONString(message);
+    }
+
+
+    @RequestMapping(value = "/updateUserById",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateUserById(Users users){
+        Message message = new Message();
+        if(usersService.updateUserById(users)){
+            message.setCode("0");
+            message.setMsg("success");
+        }else{
+            message.setCode("4");
+            message.setMsg("failed");
+        }
+        return JSON.toJSONString(message);
+    }
 }

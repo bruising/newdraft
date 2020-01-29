@@ -38,7 +38,7 @@
     </resultMap>
     <select id="selectAllNewsListCont" resultType="java.lang.Long">
         select count(*) FROM news INNER JOIN
-        users ON users.user_id=news.news_owner
+        users ON users.id=news.news_owner
         <where>
             <if test="map.news_status!=0">
                 and news_status=#{map.news_status}

@@ -45,4 +45,16 @@ public class NewdraftApplicationTests {
         List<NewsList> newsLists = newsMapper.selectAllNewsList(map);
         System.out.println(newsLists.size());
     }
+    @Test
+    public void test02(){
+        Map<String,Object>map=new HashMap<>();
+        map.put("index",0);
+        map.put("limit",5);
+        Users users = new Users();
+        users.setUserName("商家1");
+        users.setUserPhone("18600730811");
+        map.put("users",users);
+        List<Users> users1 = usersMapper.selectUsers(map);
+        System.out.println(users1.size());
+    }
 }
