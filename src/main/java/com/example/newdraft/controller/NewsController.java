@@ -3,6 +3,7 @@ package com.example.newdraft.controller;
 import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.pojo.News;
 import com.example.newdraft.model.vo.Message;
+import com.example.newdraft.model.vo.NewsList;
 import com.example.newdraft.service.NewsService;
 import com.example.newdraft.util.QNYUtils;
 import com.example.newdraft.util.RedisUtils;
@@ -14,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController(value = "/news")
@@ -29,35 +29,26 @@ public class NewsController {
 
     /**
      * 查询显示新闻信息按点击量排序
-     * @param index
+     * @param page
      * @param limit
      * @return
      */
     @ApiOperation(value = "查询显示新闻信息按点击量排序",notes = "正确返回信息信息,错误返回错误码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "index",value = "页数",dataType = "String",example = "1"),
-            @ApiImplicitParam(name = "limit",value = "每页显示的新闻数量",dataType = "String",example = "10")
+            @ApiImplicitParam(name = "page",value = "当前页",dataType = "String",example = "1"),
+            @ApiImplicitParam(name = "limit",value = "每页显示的新闻数量",dataType = "String",example = "5")
     })
-    @ApiResponses({
-            @ApiResponse(code = 4,message = "failed"),
-            @ApiResponse(code = 0,message = "success")
-    })
-    @PostMapping("/showNews")
-    public Message showNews(@RequestParam(value = "index")int index,@RequestParam("limit")int limit){
+    @RequestMapping(value = "/showNews",method = RequestMethod.POST)
+    @ResponseBody
+    public String showNews(@RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
+                            @RequestParam(value = "page",required = false,defaultValue = "1") Integer page){
         Map<String ,Object> map = new HashMap<>();
-        map.put("index",index);
+        System.out.println(limit);
+        System.out.println(page);
+        map.put("page",page);
         map.put("limit",limit);
-        List<News> newsList = newsService.inquiryAllNews(map);
-        Message message = new Message();
-        if(null == newsList){
-            message.setCode("4");
-            message.setMsg("failed");
-        }else{
-            message.setCode("0");
-            message.setMsg("success");
-            message.setData(JSON.toJSONString(newsList));
-        }
-        return message;
+        Map<String, Object> map1 = newsService.inquiryAllNews(map);
+        return JSON.toJSONString(map1);
     }
 
     /**
@@ -75,15 +66,15 @@ public class NewsController {
     })
     @PostMapping("/QueryByID")
     public Message QueryByID(@RequestParam("id")int id){
-        News news = newsService.inquiryByNewsId(id);
+        NewsList newsList = newsService.inquiryByNewsId(id);
         Message message = new Message();
-        if(null == news){
+        if(null == newsList){
             message.setCode("4");
             message.setMsg("failed");
         }else{
             message.setCode("0");
             message.setMsg("success");
-            message.setData(JSON.toJSONString(news));
+            message.setData(JSON.toJSONString(newsList));
         }
         return message;
     }
@@ -304,12 +295,12 @@ public class NewsController {
         System.out.println(news);
         Message message = new Message();
         if(redisUtils.judgeToken(token)){
-            News news1 = newsService.queryNewsById(news);
-            if(news1!=null){
-                System.out.println(news1);
+            NewsList newsList = newsService.queryNewsById(news);
+            if(newsList!=null){
+                System.out.println(newsList);
                 message.setCode("0");
                 message.setMsg("success");
-                message.setData(news1.getNews_text());
+                message.setData(newsList.getNews_text());
             }else{
                 message.setCode("4");
                 message.setMsg("failed");
@@ -318,6 +309,25 @@ public class NewsController {
             message.setCode("5");
             message.setMsg("noToken");
         }
+        return JSON.toJSONString(message);
+    }
+
+    /**
+     * 新闻查看数量+1
+     * @param news_id
+     * @return
+     */
+    @RequestMapping(value = "/addNewsIndex",method = RequestMethod.POST)
+    @ResponseBody
+    public String addNewsIndex(Integer news_id){
+        Message message = new Message();
+            if(newsService.addNewsIndex(news_id)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
         return JSON.toJSONString(message);
     }
 }

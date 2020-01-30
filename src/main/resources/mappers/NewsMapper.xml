@@ -4,13 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newdraft.mapper.NewsMapper">
     <select id="selectAllNews" resultType="com.example.newdraft.model.pojo.News">
-       select * from news order by news_level desc,news_index desc limit #{index},#{limit}
+       select news_id,news_title,news_createTime,news_updatedTime from news where news_status=1 order by news_level desc,news_index desc limit #{index},#{limit}
     </select>
-    <select id="selectByNewsId" resultType="com.example.newdraft.model.pojo.News">
-        select * from news where news_id=#{id}
+    <select id="selectAllNewsCount" resultType="java.lang.Long">
+        select count(*) from news where news_status=1 order by news_level desc,news_index desc
+    </select>
+    <select id="selectByNewsId" resultMap="newsList">
+        select news_id,news_title,news_index,news_text,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
+        users ON users.id=news.news_owner where news_id=#{id}
     </select>
     <select id="selectAllNewsList" resultMap="newsList">
-        select news_id,news_title,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
+        select news_id,news_title,news_index,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
         users ON users.id=news.news_owner
         <where>
             <if test="map.news_status!=0">
@@ -27,6 +31,8 @@
     </select>
     <resultMap id="newsList" type="com.example.newdraft.model.vo.NewsList">
         <id property="news_id" column="news_id"/>
+        <result property="news_text" column="news_text"/>
+        <result property="news_index" column="news_index"/>
         <result property="news_title" column="news_title"/>
         <result property="news_type" column="news_type"/>
         <result property="userName" column="user_name"/>
@@ -63,6 +69,10 @@
     <insert id="add">
         insert into news(news_title,news_text,news_type,news_owner,news_createTime,news_verifiedTime,news_status)values (#{news_title},#{news_text},2,#{news_owner},SYSDATE(),SYSDATE(),1)
     </insert>
+
+    <update id="updateNewsIndex">
+        update news set news_index=news_index+1 where news_id=#{news_id}
+    </update>
 
 
 </mapper>

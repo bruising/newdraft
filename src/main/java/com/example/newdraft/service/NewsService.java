@@ -1,8 +1,8 @@
 package com.example.newdraft.service;
 
 import com.example.newdraft.model.pojo.News;
+import com.example.newdraft.model.vo.NewsList;
 
-import java.util.List;
 import java.util.Map;
 
 public interface NewsService {
@@ -11,13 +11,13 @@ public interface NewsService {
      * @param map
      * @return
      */
-    List<News> inquiryAllNews(Map<String,Object> map);
+    Map<String,Object> inquiryAllNews(Map<String,Object> map);
     /**
      * 根据新闻id 查询新闻详细信息
      * @param id
      * @return
      */
-    News inquiryByNewsId(int id);
+    NewsList inquiryByNewsId(int id);
 
     /**
      * 后台新闻列表
@@ -59,5 +59,12 @@ public interface NewsService {
      * @param news
      * @return
      */
-    News queryNewsById(News news);
+    NewsList queryNewsById(News news);
+
+    /**
+     * 新闻查看数量+1
+     * @param news_id
+     * @return
+     */
+    boolean addNewsIndex(Integer news_id);
 }
