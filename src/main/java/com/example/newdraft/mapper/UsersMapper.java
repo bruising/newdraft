@@ -33,4 +33,10 @@ public interface UsersMapper {
     int qiyong(Integer id);
 
     int updateUserById(Users users);
+
+    /**
+     *  查询子管理员
+     * @return
+     */
+    List<Users>queryAdministrator();
 }

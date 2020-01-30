@@ -12,6 +12,7 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.model.DefaultPutRet;
 import cz.mallat.uasparser.UserAgentInfo;
 import io.swagger.annotations.*;
+import org.apache.catalina.User;
 import org.apache.http.HttpResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -227,4 +229,12 @@ public class UsersController {
         }
         return JSON.toJSONString(message);
     }
+    @PostMapping(value = "/queryAdministrator")
+    @ResponseBody
+    public   String  queryAdministrator(){
+        List<Users>administrator=usersService.queryAdministrator();
+        System.out.println(administrator);
+        return   JSON.toJSONString(administrator);
+    }
+
 }

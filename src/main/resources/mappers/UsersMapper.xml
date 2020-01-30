@@ -79,4 +79,8 @@
     <update id="updateUserById">
         update users set user_email=#{userEmail},user_name=#{userName},user_photo=#{userPhoto} where id=#{id}
     </update>
+
+    <select id="queryAdministrator"  resultMap="users">
+          SELECT * FROM `users`  WHERE  user_role=5;
+    </select>
 </mapper>

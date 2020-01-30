@@ -91,6 +91,11 @@ public class UsersServiceImpl implements UsersService {
         return false;
     }
 
+    @Override
+    public List<Users> queryAdministrator() {
+        return usersMapper.queryAdministrator();
+    }
+
     //存放token
     private void saveToken(Users user1, String token) {
         String tokenKey="User"+user1.getId();

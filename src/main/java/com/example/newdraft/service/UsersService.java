@@ -2,6 +2,7 @@ package com.example.newdraft.service;
 
 import com.example.newdraft.model.pojo.Users;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,4 +34,10 @@ public interface UsersService {
     boolean qiyong(Integer id);
 
     boolean updateUserById(Users users);
+
+    /**
+     * 查询子管理员
+     * @return
+     */
+    List<Users> queryAdministrator();
 }
