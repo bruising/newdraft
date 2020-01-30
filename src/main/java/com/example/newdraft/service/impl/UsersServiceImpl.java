@@ -93,6 +93,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<Users> queryAdministrator() {
+
+
         return usersMapper.queryAdministrator();
     }
 

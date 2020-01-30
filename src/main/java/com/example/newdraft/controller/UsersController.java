@@ -133,7 +133,7 @@ public class UsersController {
     @RequestMapping("/queryUser")
     @ResponseBody
     public String queryUser( @RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
-                             @RequestParam(value = "page",required = false,defaultValue = "1") Integer page,
+                             @RequestParam(value = "pa  ge",required = false,defaultValue = "1") Integer page,
                              Users users){
         Map<String, Object> map = new HashMap<>();
         map.put("limit",limit);
@@ -229,12 +229,27 @@ public class UsersController {
         }
         return JSON.toJSONString(message);
     }
+
+    @ApiOperation(value = "超级管理员查询所有子管理员")
+    @ApiResponses({
+            @ApiResponse(code = 1,message = "failed"),
+            @ApiResponse(code = 0,message = "success")
+    })
     @PostMapping(value = "/queryAdministrator")
     @ResponseBody
     public   String  queryAdministrator(){
+
+        Map<String,Object>map=new HashMap<>();
         List<Users>administrator=usersService.queryAdministrator();
+        if(administrator!=null){
+            map.put("code",0);
+            map.put("data",administrator);
+        }else {
+            map.put("code",1);
+            map.put("data","");
+        }
         System.out.println(administrator);
-        return   JSON.toJSONString(administrator);
+        return   JSON.toJSONString(map);
     }
 
 }
