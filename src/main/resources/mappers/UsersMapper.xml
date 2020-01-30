@@ -4,17 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newdraft.mapper.UsersMapper">
     <sql id="user">
-        id,user_id,user_name,user_password,user_phone,user_email,user_photo,user_wechart,user_role,user_status
+        id,user_name,user_password,user_phone,user_email,user_photo,user_wechart,user_role,user_status
     </sql>
     <select id="selectUsersByPhoneAndPassword" resultMap="users">
         SELECT
          <include refid="user"/>
-         FROM users WHERE user_phone=#{userPhone} AND user_password=#{userPassword} AND user_status='1'
+         FROM users WHERE user_phone=#{userPhone} AND user_password=#{userPassword} AND user_status='1'and user_role in (5,6)
     </select>
     <resultMap id="users" type="com.example.newdraft.model.pojo.Users">
     <id property="id" column="id"/>
-        <id property="id" column="id"/>
-        <result property="userId"  column="user_id"/>
         <result property="userEmail" column="user_email"/>
         <result property="userName" column="user_name"/>
         <result property="userPassword" column="user_password"/>
@@ -24,50 +22,61 @@
         <result property="userWechart" column="user_wechart"/>
         <result property="userStatus" column="user_status"/>
     </resultMap>
-
-
-    <select id="queryUserByNameandPhoneandEmail" resultMap="users">
-        SELECT * FROM `users`
+    <select id="selectUsers" resultMap="users">
+        select <include refid="user"/>
+        from users
         <where>
-            <if  test="users1 !=null ">
-              <if  test="users1.userName !=null and users1.userName != ''">
-                AND   user_name  LIKE   "%"#{users1.userName}"%"
-              </if>
-              <if  test="users1.userPhone != null  and users1.userPhone != ''">
-                AND  user_phone  LIKE "%"#{users1.userPhone}"%"
-
-              </if>
-              <if  test="users1.userEmail !=null  and  users1.userEmail != ''">
-                AND  user_email LIKE  "%"#{users1.userEmail}"%"
-
-              </if>
+            <if test="map.users.userName!=null and map.users.userName!=''">
+                and user_name=#{map.users.userName}
             </if>
-            AND  user_role in(1,2) AND user_status = 1  LIMIT #{start},#{rows}
+            <if test="map.users.userPhone!=null and map.users.userPhone!=''">
+                and user_phone=#{map.users.userPhone}
+            </if>
+            <if test="map.users.userEmail!=null and map.users.userEmail!=''">
+                and user_email=#{map.users.userEmail}
+            </if>
+            <if test="map.users.userRole!=null and map.users.userRole!=0 and map.users.userRole!=''">
+                and user_role=#{map.users.userRole}
+            </if>
+            <if test="map.users.userRole!=null and map.users.userStatus!=0 and map.users.userStatus!=''">
+                and user_status=#{map.users.userStatus}
+            </if>
+         and user_role not in (5,6)
         </where>
-
+        limit #{map.index},#{map.limit}
     </select>
 
-    <select id="queryUserByNameandPhoneandEmailCount"  resultType="int">
-        SELECT COUNT(*) FROM `users`
-        <where>
-            <if  test="userName !=null  and  userName != ''">
-                AND user_name  LIKE  "%"#{userName}"%"
-            </if>
-            <if  test="userPhone !=null  and  userPhone !=''">
-                AND  user_phone  LIKE "%"#{userPhone}"%"
-            </if>
-            <if  test="userEmail  !=null and  userEmail !=''">
-                AND  user_email LIKE  "%"#{userEmail}"%"
-            </if>
 
-            AND  user_role in(1,2)
+
+    <select id="selectUsersCount" resultType="java.lang.Long">
+        select count(*)
+        from users
+        <where>
+            <if test="map.users.userName!=null and map.users.userName!=''">
+                and user_name=#{map.users.userName}
+            </if>
+            <if test="map.users.userPhone!=null and map.users.userPhone!=''">
+                and user_phone=#{map.users.userPhone}
+            </if>
+            <if test="map.users.userEmail!=null and map.users.userEmail!=''">
+                and user_email=#{map.users.userEmail}
+            </if>
+            <if test="map.users.userRole!=null and map.users.userRole!=0 and map.users.userRole!=''">
+                and user_role=#{map.users.userRole}
+            </if>
+            <if test="map.users.userRole!=null and map.users.userStatus!=0 and map.users.userStatus!=''">
+                and user_status=#{map.users.userStatus}
+            </if>
+            and user_role not in (5,6)
         </where>
     </select>
-    <update id="deleteById">
-       UPDATE  users  SET  user_status=0  WHERE  id =#{id}
+    <update id="delUsers">
+        update users set user_status=3 where id=#{id}
     </update>
-
-    <select id="findById"  resultMap="users">
-       SELECT  * FROM users   WHERE   id=#{id}
-    </select>
+    <update id="qiyong">
+        update users set user_status=1 where id=#{id}
+    </update>
+    <update id="updateUserById">
+        update users set user_email=#{userEmail},user_name=#{userName},user_photo=#{userPhoto} where id=#{id}
+    </update>
 </mapper>

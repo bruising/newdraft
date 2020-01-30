@@ -1,6 +1,9 @@
 package com.example.newdraft.service;
 
 import com.example.newdraft.model.pojo.Programs;
+import com.example.newdraft.model.vo.Message;
+
+import java.util.Map;
 
 public interface ProgramsService {
 
@@ -10,4 +13,22 @@ public interface ProgramsService {
 
     Programs getProgramsById( String id);//通过编号获取项目信息
 
+    /**
+     * 项目列表
+     * @param map 查询条件（项目名称模糊查询、国家名）
+     * @return
+     */
+    Message searchPrograms(Map<String, Object> map);
+    /**
+     * 项目详情页
+     * @param programId 项目ID
+     * @return 项目详情
+     */
+    Message searchProgramInfo(String programId);
+    /**
+     * 下架项目
+     * @param programId 项目ID
+     * @return 执行结果
+     */
+    Message deleteProgramById(String programId);
 }

@@ -25,4 +25,44 @@
         <result property="programLevel" column="program_level"></result>
         <result property="programStatus" column="program_status"></result>
     </resultMap>
+
+    <!--  ==========分隔线==========  -->
+
+    <select id="searchPrograms" resultMap="programs">
+        SELECT * FROM programs WHERE program_status = 1
+        <if test="programTitle!=null and programTitle!=''">
+            AND program_title LIKE '%${programTitle}%'
+        </if>
+        <if test="country!=null and country!=''">
+            AND country LIKE '%${country}%'
+        </if>
+    </select>
+
+    <select id="searchProgramInfo" resultMap="programsVo">
+        SELECT p.*, GROUP_CONCAT(u.user_name) as `names`, GROUP_CONCAT(f.link) as links
+        FROM programs p, mid_program_firm mpf, firms f, users u
+        WHERE p.program_id = mpf.project_id AND mpf.firm_id = f.firm_id AND f.user_id = u.id
+        AND p.program_status = 1 AND u.user_role = 2 AND u.user_status = 1
+        <if test="programId!=null and programId>0">
+            AND p.program_id = #{programId}
+        </if>
+        GROUP BY mpf.project_id
+    </select>
+
+    <update id="deleteProgramById">
+        UPDATE programs SET program_status = 2 WHERE program_id = #{programId}
+    </update>
+
+    <resultMap id="programsVo" type="com.example.newdraft.model.vo.ProgramsVo">
+        <result property="programTitle" column="program_title"/>
+        <result property="programInfo" column="program_info"/>
+        <result property="programRequire" column="program_require"/>
+        <result property="programPhone" column="program_phone"/>
+        <collection property="firmNames" ofType="java.lang.String" javaType="java.util.List">
+            <result column="names"/>
+        </collection>
+        <collection property="links" ofType="java.lang.String" javaType="java.util.List">
+            <result column="links"/>
+        </collection>
+    </resultMap>
 </mapper>

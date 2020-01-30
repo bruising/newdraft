@@ -5,7 +5,6 @@ import com.example.newdraft.mapper.UsersMapper;
 import com.example.newdraft.model.pojo.Users;
 import com.example.newdraft.service.UsersService;
 import com.example.newdraft.util.MD5;
-import com.example.newdraft.util.PageBean;
 import com.example.newdraft.util.RedisUtils;
 import org.springframework.stereotype.Service;
 
@@ -50,39 +49,51 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public PageBean<Users> queryUserByNameandPhoneandEmailandPage(Users  users,int currentPage, int rows) {
-        //创建一个空的pageBean对象
-        PageBean<Users>pb=new PageBean<>();
-        //设置当前第几页  和每页显示的条数
-        pb.setCurrentPage(currentPage);
-        pb.setRows(rows);
-        //使用Dao层查询符合条件的数据
-        int totalCount=usersMapper.queryUserByNameandPhoneandEmailCount(users);
-        pb.setTotalCount(totalCount);
-       //计算开始的索引
-        int  start=(currentPage-1)*rows;
-        //每页显示的记录数
-        List<Users>list= usersMapper.queryUserByNameandPhoneandEmail(users,start,rows);
-        pb.setList(list);
-        //查询总页码
-        int  totalPage=totalCount%rows==0?(totalCount/rows):totalCount/rows+1;
-        pb.setTotalPage(totalPage);
-        return pb;
+    public Map<String, Object> queryUsersList(Map<String, Object> map) {
+        Map<String,Object>statusMap=new HashMap<String, Object>();
+        statusMap.put("code",0);
+        statusMap.put("msg","");
+        statusMap.put("count",0);
+        int page=Integer.parseInt(map.get("page").toString());
+        int limit=Integer.parseInt(map.get("limit").toString());
+        int index=(page-1)*limit;
+        map.put("index",index);
+        List<Users> UserLists = usersMapper.selectUsers(map);
+        long num = usersMapper.selectUsersCount(map);
+        if(num>0){
+            statusMap.put("data",UserLists);
+            statusMap.put("count",num);
+        }
+        return statusMap;
     }
 
     @Override
-    public int deleteById(int id) {
-        return usersMapper.deleteById(id);
+    public boolean del(Integer id) {
+        if(usersMapper.delUsers(id)>0){
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Users findById(int id) {
-        return usersMapper.findById(id);
+    public boolean qiyong(Integer id) {
+        if(usersMapper.qiyong(id)>0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateUserById(Users users) {
+        if(usersMapper.updateUserById(users)>0){
+            return true;
+        }
+        return false;
     }
 
     //存放token
     private void saveToken(Users user1, String token) {
-        String tokenKey="User"+user1.getUserId();
+        String tokenKey="User"+user1.getId();
         String tokenValue=null;
         if((tokenValue=(String) redisUtils.get(tokenKey))!=null){
             redisUtils.delete(tokenKey);
@@ -96,7 +107,7 @@ public class UsersServiceImpl implements UsersService {
         StringBuilder sb=new StringBuilder();
         sb.append("token-");
         sb.append(type);
-        sb.append(MD5.getMD5(user.getUserId().toString(),32));
+        sb.append(MD5.getMD5(user.getId().toString(),32));
         sb.append(LocalDateTime.now(ZoneOffset.of("+8")).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
         sb.append(UUID.randomUUID().toString().substring(0,6));
         return sb.toString();

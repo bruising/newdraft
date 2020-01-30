@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 吴成卓
@@ -23,29 +24,13 @@ public interface UsersMapper {
      */
     Users selectUsersByPhoneAndPassword(Users users);
 
-    /**
-     * 查询用户  通过昵称  手机号   邮箱模糊查询
-     * @return
-     */
-    List<Users>queryUserByNameandPhoneandEmail(@Param("users1") Users  users1,@Param("start") int  currentPage,@Param("rows") int rows);
+    List<Users> selectUsers(@Param("map") Map<String,Object>map);
 
-    /**
-     * 查询符合条件的总记录数
-     * @return
-     */
-    int   queryUserByNameandPhoneandEmailCount(Users  users);
+    Long selectUsersCount(@Param("map") Map<String,Object>map);
 
-    /**
-     * 根据用户id删除
-     * @param id
-     * @return
-     */
-    int  deleteById(int id);
+    int delUsers(@Param("id") Integer id);
 
-    /**
-     * 根据id查询用户
-     * @param id
-     * @return
-     */
-    Users findById(int id);
+    int qiyong(Integer id);
+
+    int updateUserById(Users users);
 }
