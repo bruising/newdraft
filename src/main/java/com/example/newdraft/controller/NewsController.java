@@ -3,6 +3,7 @@ package com.example.newdraft.controller;
 import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.pojo.News;
 import com.example.newdraft.model.vo.Message;
+import com.example.newdraft.model.vo.NewsList;
 import com.example.newdraft.service.NewsService;
 import com.example.newdraft.util.QNYUtils;
 import com.example.newdraft.util.RedisUtils;
@@ -65,15 +66,15 @@ public class NewsController {
     })
     @PostMapping("/QueryByID")
     public Message QueryByID(@RequestParam("id")int id){
-        News news = newsService.inquiryByNewsId(id);
+        NewsList newsList = newsService.inquiryByNewsId(id);
         Message message = new Message();
-        if(null == news){
+        if(null == newsList){
             message.setCode("4");
             message.setMsg("failed");
         }else{
             message.setCode("0");
             message.setMsg("success");
-            message.setData(JSON.toJSONString(news));
+            message.setData(JSON.toJSONString(newsList));
         }
         return message;
     }
@@ -294,12 +295,12 @@ public class NewsController {
         System.out.println(news);
         Message message = new Message();
         if(redisUtils.judgeToken(token)){
-            News news1 = newsService.queryNewsById(news);
-            if(news1!=null){
-                System.out.println(news1);
+            NewsList newsList = newsService.queryNewsById(news);
+            if(newsList!=null){
+                System.out.println(newsList);
                 message.setCode("0");
                 message.setMsg("success");
-                message.setData(news1.getNews_text());
+                message.setData(newsList.getNews_text());
             }else{
                 message.setCode("4");
                 message.setMsg("failed");
@@ -308,6 +309,25 @@ public class NewsController {
             message.setCode("5");
             message.setMsg("noToken");
         }
+        return JSON.toJSONString(message);
+    }
+
+    /**
+     * 新闻查看数量+1
+     * @param news_id
+     * @return
+     */
+    @RequestMapping(value = "/addNewsIndex",method = RequestMethod.POST)
+    @ResponseBody
+    public String addNewsIndex(Integer news_id){
+        Message message = new Message();
+            if(newsService.addNewsIndex(news_id)){
+                message.setCode("0");
+                message.setMsg("success");
+            }else{
+                message.setCode("4");
+                message.setMsg("failed");
+            }
         return JSON.toJSONString(message);
     }
 }

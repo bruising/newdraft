@@ -32,8 +32,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public News inquiryByNewsId(int id) {
-        News news = newsMapper.selectByNewsId(id);
+    public NewsList inquiryByNewsId(int id) {
+        NewsList news = newsMapper.selectByNewsId(id);
         if(null == news ){
             return null;
         }
@@ -96,7 +96,16 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public News queryNewsById(News news) {
+    public NewsList queryNewsById(News news) {
       return newsMapper.selectByNewsId(news.getNews_id());
+    }
+
+    @Override
+    public boolean addNewsIndex(Integer news_id) {
+        int i = newsMapper.updateNewsIndex(news_id);
+        if(i>0){
+            return true;
+        }
+        return false;
     }
 }

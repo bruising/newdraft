@@ -23,7 +23,7 @@ public interface NewsMapper {
      * @param id
      * @return
      */
-    News selectByNewsId(int id);
+    NewsList selectByNewsId(int id);
 
     /**
      * 后台显示新闻列表
@@ -67,4 +67,10 @@ public interface NewsMapper {
      */
     int add(News news);
 
+    /**
+     * 修改新闻的查看数量
+     * @param news_id
+     * @return
+     */
+    int updateNewsIndex(@Param("news_id") Integer news_id);
 }
