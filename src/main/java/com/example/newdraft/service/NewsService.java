@@ -2,7 +2,6 @@ package com.example.newdraft.service;
 
 import com.example.newdraft.model.pojo.News;
 
-import java.util.List;
 import java.util.Map;
 
 public interface NewsService {
@@ -11,7 +10,7 @@ public interface NewsService {
      * @param map
      * @return
      */
-    List<News> inquiryAllNews(Map<String,Object> map);
+    Map<String,Object> inquiryAllNews(Map<String,Object> map);
     /**
      * 根据新闻id 查询新闻详细信息
      * @param id

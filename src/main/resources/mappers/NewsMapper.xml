@@ -6,6 +6,9 @@
     <select id="selectAllNews" resultType="com.example.newdraft.model.pojo.News">
        select * from news order by news_level desc,news_index desc limit #{index},#{limit}
     </select>
+    <select id="selectAllNewsCount" resultType="java.lang.Long">
+        select count(*) from news order by news_level desc,news_index desc
+    </select>
     <select id="selectByNewsId" resultType="com.example.newdraft.model.pojo.News">
         select * from news where news_id=#{id}
     </select>
@@ -63,6 +66,7 @@
     <insert id="add">
         insert into news(news_title,news_text,news_type,news_owner,news_createTime,news_verifiedTime,news_status)values (#{news_title},#{news_text},2,#{news_owner},SYSDATE(),SYSDATE(),1)
     </insert>
+
 
 
 </mapper>

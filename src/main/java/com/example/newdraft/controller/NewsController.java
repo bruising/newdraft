@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController(value = "/news")
@@ -29,35 +28,26 @@ public class NewsController {
 
     /**
      * 查询显示新闻信息按点击量排序
-     * @param index
+     * @param page
      * @param limit
      * @return
      */
     @ApiOperation(value = "查询显示新闻信息按点击量排序",notes = "正确返回信息信息,错误返回错误码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "index",value = "页数",dataType = "String",example = "1"),
-            @ApiImplicitParam(name = "limit",value = "每页显示的新闻数量",dataType = "String",example = "10")
+            @ApiImplicitParam(name = "page",value = "当前页",dataType = "String",example = "1"),
+            @ApiImplicitParam(name = "limit",value = "每页显示的新闻数量",dataType = "String",example = "5")
     })
-    @ApiResponses({
-            @ApiResponse(code = 4,message = "failed"),
-            @ApiResponse(code = 0,message = "success")
-    })
-    @PostMapping("/showNews")
-    public Message showNews(@RequestParam(value = "index")int index,@RequestParam("limit")int limit){
+    @RequestMapping(value = "/showNews",method = RequestMethod.POST)
+    @ResponseBody
+    public String showNews(@RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
+                            @RequestParam(value = "page",required = false,defaultValue = "1") Integer page){
         Map<String ,Object> map = new HashMap<>();
-        map.put("index",index);
+        System.out.println(limit);
+        System.out.println(page);
+        map.put("page",page);
         map.put("limit",limit);
-        List<News> newsList = newsService.inquiryAllNews(map);
-        Message message = new Message();
-        if(null == newsList){
-            message.setCode("4");
-            message.setMsg("failed");
-        }else{
-            message.setCode("0");
-            message.setMsg("success");
-            message.setData(JSON.toJSONString(newsList));
-        }
-        return message;
+        Map<String, Object> map1 = newsService.inquiryAllNews(map);
+        return JSON.toJSONString(map1);
     }
 
     /**

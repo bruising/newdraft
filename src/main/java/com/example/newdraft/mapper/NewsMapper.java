@@ -16,6 +16,8 @@ public interface NewsMapper {
      */
     List<News> selectAllNews(Map<String,Object> map);
 
+    Long selectAllNewsCount();
+
     /**
      * 根据id查询新闻详细信息
      * @param id

@@ -15,13 +15,20 @@ public class NewsServiceImpl implements NewsService {
     @Resource
     private NewsMapper newsMapper;
     @Override
-    public List<News> inquiryAllNews(Map<String, Object> map) {
-        List<News> newsList = newsMapper.selectAllNews(map);
-        if(null == newsList){
-            return null;
-        }else {
-            return newsList;
+    public Map<String, Object> inquiryAllNews(Map<String, Object> map) {
+        Map<String,Object>statusMap=new HashMap<String, Object>();
+        statusMap.put("count",0);
+        int page=Integer.parseInt(map.get("page").toString());
+        int limit=Integer.parseInt(map.get("limit").toString());
+        int index=(page-1)*limit;
+        map.put("index",index);
+        List<News> newsLists = newsMapper.selectAllNews(map);
+        long num = newsMapper.selectAllNewsCount();
+        if(num>0){
+            statusMap.put("data",newsLists);
+            statusMap.put("count",num);
         }
+        return statusMap;
     }
 
     @Override
