@@ -13,11 +13,11 @@ public interface NewsService {
      */
     Map<String,Object> inquiryAllNews(Map<String,Object> map);
     /**
-     * 根据新闻id 查询新闻详细信息
-     * @param id
+     * 根据新闻序号 查询新闻详细信息
+     * @param num
      * @return
      */
-    NewsList inquiryByNewsId(int id);
+    NewsList inquiryByNewsId(int num);
 
     /**
      * 后台新闻列表

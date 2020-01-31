@@ -22,7 +22,7 @@ public class NewsServiceImpl implements NewsService {
         int limit=Integer.parseInt(map.get("limit").toString());
         int index=(page-1)*limit;
         map.put("index",index);
-        List<News> newsLists = newsMapper.selectAllNews(map);
+        List<NewsList> newsLists = newsMapper.selectAllNews(map);
         long num = newsMapper.selectAllNewsCount();
         if(num>0){
             statusMap.put("data",newsLists);
@@ -32,8 +32,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsList inquiryByNewsId(int id) {
-        NewsList news = newsMapper.selectByNewsId(id);
+    public NewsList inquiryByNewsId(int num) {
+        NewsList news = newsMapper.selectByNewsId(num);
         if(null == news ){
             return null;
         }

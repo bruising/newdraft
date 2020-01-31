@@ -14,16 +14,16 @@ public interface NewsMapper {
      * 查询新闻 根据点击量排序 index 页数 limit 每页显示多少
      * @return
      */
-    List<News> selectAllNews(Map<String,Object> map);
+    List<NewsList> selectAllNews(Map<String,Object> map);
 
     Long selectAllNewsCount();
 
     /**
      * 根据id查询新闻详细信息
-     * @param id
+     * @param num
      * @return
      */
-    NewsList selectByNewsId(int id);
+    NewsList selectByNewsId(@Param("num")int num);
 
     /**
      * 后台显示新闻列表

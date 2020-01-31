@@ -29,4 +29,5 @@ public class NewsList {
     private Integer news_level;
     private Integer news_index;
     private Integer news_status;
+    private Integer num;
 }

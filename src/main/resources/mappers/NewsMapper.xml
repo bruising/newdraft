@@ -3,15 +3,32 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.newdraft.mapper.NewsMapper">
-    <select id="selectAllNews" resultType="com.example.newdraft.model.pojo.News">
-       select news_id,news_title,news_createTime,news_updatedTime from news where news_status=1 order by news_level desc,news_index desc limit #{index},#{limit}
+    <select id="selectAllNews" resultMap="newsList">
+        select e.* FROM(
+        select (@rownum:=@rownum + 1) AS num,a.* from
+        (select news_id,news_title,news_index,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM  news  INNER JOIN
+        users ON users.id=news.news_owner
+        where
+        news_status=1 order by news_level desc,news_index desc) as a ,(SELECT @rownum:=0) i ) as e limit #{index},#{limit}
     </select>
     <select id="selectAllNewsCount" resultType="java.lang.Long">
-        select count(*) from news where news_status=1 order by news_level desc,news_index desc
+<!--        select count(*) from news where news_status=1 order by news_level desc,news_index desc-->
+        select count(e.num) FROM(
+        select (@rownum:=@rownum + 1) AS num,a.* from
+        (select news_id,news_title,news_index,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM  news  INNER JOIN
+        users ON users.id=news.news_owner
+        where
+        news_status=1 order by news_level desc,news_index desc) as a ,(SELECT @rownum:=0) i ) as e
     </select>
     <select id="selectByNewsId" resultMap="newsList">
-        select news_id,news_title,news_index,news_text,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
-        users ON users.id=news.news_owner where news_id=#{id}
+        select e.* FROM(
+        select (@rownum:=@rownum + 1) AS num,a.* from
+        (select news_id,news_title,news_text,news_index,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM  news  INNER JOIN
+        users ON users.id=news.news_owner
+        where
+        news_status=1 order by news_level desc,news_index desc) as a ,(SELECT @rownum:=0) i ) as e WHERE num=#{num}
+<!--        select news_id,news_title,news_index,news_text,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN-->
+<!--        users ON users.id=news.news_owner where news_id=#{id}-->
     </select>
     <select id="selectAllNewsList" resultMap="newsList">
         select news_id,news_title,news_index,news_type,user_name,news_createTime,news_verifiedTime,news_updatedTime,news_level,news_status FROM news INNER JOIN
@@ -31,6 +48,7 @@
     </select>
     <resultMap id="newsList" type="com.example.newdraft.model.vo.NewsList">
         <id property="news_id" column="news_id"/>
+        <result property="num" column="num"/>
         <result property="news_text" column="news_text"/>
         <result property="news_index" column="news_index"/>
         <result property="news_title" column="news_title"/>

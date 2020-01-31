@@ -43,8 +43,6 @@ public class NewsController {
     public String showNews(@RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
                             @RequestParam(value = "page",required = false,defaultValue = "1") Integer page){
         Map<String ,Object> map = new HashMap<>();
-        System.out.println(limit);
-        System.out.println(page);
         map.put("page",page);
         map.put("limit",limit);
         Map<String, Object> map1 = newsService.inquiryAllNews(map);
@@ -53,20 +51,20 @@ public class NewsController {
 
     /**
      * 根据id查询新闻详细信息
-     * @param id
+     * @param num
      * @return
      */
     @ApiOperation(value = "根据id查询新闻详细信息",notes = "正确返回信息信息,错误返回错误码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "新闻id",dataType = "String",example = "1")
+            @ApiImplicitParam(name = "num",value = "新闻序号",dataType = "String",example = "1")
     })
     @ApiResponses({
             @ApiResponse(code = 4,message = "failed"),
             @ApiResponse(code = 0,message = "success")
     })
     @PostMapping("/QueryByID")
-    public Message QueryByID(@RequestParam("id")int id){
-        NewsList newsList = newsService.inquiryByNewsId(id);
+    public Message QueryByID(@RequestParam("num")int num){
+        NewsList newsList = newsService.inquiryByNewsId(num);
         Message message = new Message();
         if(null == newsList){
             message.setCode("4");
