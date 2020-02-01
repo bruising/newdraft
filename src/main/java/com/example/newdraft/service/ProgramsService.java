@@ -24,7 +24,7 @@ public interface ProgramsService {
      * @param programId 项目ID
      * @return 项目详情
      */
-    Message searchProgramInfo(String programId);
+    Map<String, Object> searchProgramInfo(String programId);
     /**
      * 下架项目
      * @param programId 项目ID

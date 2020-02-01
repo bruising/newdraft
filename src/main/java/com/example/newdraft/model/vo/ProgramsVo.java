@@ -19,6 +19,10 @@ import java.util.List;
 @NoArgsConstructor
 public class ProgramsVo {
     /**
+     * 项目主键
+     */
+    private Integer programId;
+    /**
      * 项目标题
      */
     private String programTitle;
@@ -27,7 +31,10 @@ public class ProgramsVo {
      * 项目简介
      */
     private String programInfo;
-
+    /**
+     * 所属国家
+     */
+    private String country;
     /**
      * 项目的申请要求
      */

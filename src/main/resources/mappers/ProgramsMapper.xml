@@ -54,8 +54,10 @@
     </update>
 
     <resultMap id="programsVo" type="com.example.newdraft.model.vo.ProgramsVo">
+        <id property="programId" column="program_id"/>
         <result property="programTitle" column="program_title"/>
         <result property="programInfo" column="program_info"/>
+        <result property="country" column="country"/>
         <result property="programRequire" column="program_require"/>
         <result property="programPhone" column="program_phone"/>
         <collection property="firmNames" ofType="java.lang.String" javaType="java.util.List">

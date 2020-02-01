@@ -9,6 +9,7 @@ import com.example.newdraft.service.ProgramsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,18 +50,23 @@ public class ProgramsServiceImpl implements ProgramsService {
     }
 
     @Override
-    public Message searchProgramInfo(String programId) {
+    public Map<String, Object> searchProgramInfo(String programId) {
         ProgramsVo program = programsMapper.searchProgramInfo(programId);
-        Message message = new Message();
+//        Message message = new Message();
+        Map<String, Object> map = new HashMap<>();
         if (program!=null){
-            message.setCode("200");
-            message.setMsg("查询成功");
-            message.setData(JSON.toJSONString(program));
+//            message.setCode("200");
+//            message.setMsg("查询成功");
+//            message.setData(JSON.toJSONString(program));
+            map.put("code", 200);
+            map.put("data", program);
         }else {
-            message.setCode("123");
-            message.setMsg("未查询到项目详情");
+            map.put("code", 123);
+//            message.setCode("123");
+//            message.setMsg("未查询到项目详情");
         }
-        return message;
+//        return message;
+        return map;
     }
 
     @Override

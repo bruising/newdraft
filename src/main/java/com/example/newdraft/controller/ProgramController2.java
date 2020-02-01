@@ -1,5 +1,6 @@
 package com.example.newdraft.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.example.newdraft.model.vo.Message;
 import com.example.newdraft.service.ProgramsService;
 import io.swagger.annotations.*;
@@ -53,7 +54,7 @@ public class ProgramController2 {
         return programsService.searchPrograms(map);
     }
 
-    @PostMapping(value = "/searchProgramInfo")
+    @RequestMapping(value = "/searchProgramInfo")
     @ResponseBody
     @ApiOperation(value = "项目详情", notes = "查询成功则展示到详情页，失败则不显示结果")
     @ApiImplicitParams({
@@ -63,9 +64,13 @@ public class ProgramController2 {
             @ApiResponse(code = 200, message = "查询成功"),
             @ApiResponse(code = 123, message = "未查询到项目详情")
     })
-    public Message searchPrograms(
+    public String searchProgramInfo(
             @RequestParam(value = "programId", required = false, defaultValue = "") String programId){
-        return programsService.searchProgramInfo(programId);
+        System.out.println(programId);
+//        Message message = programsService.searchProgramInfo(programId);
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("data", message);
+        return JSON.toJSONString(programsService.searchProgramInfo(programId));
     }
 
     @PostMapping(value = "/deleteProgramById")
