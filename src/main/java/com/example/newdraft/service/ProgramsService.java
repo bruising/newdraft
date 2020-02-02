@@ -31,4 +31,6 @@ public interface ProgramsService {
      * @return 执行结果
      */
     Message deleteProgramById(String programId);
+
+    int  queryProgramsCount();
 }

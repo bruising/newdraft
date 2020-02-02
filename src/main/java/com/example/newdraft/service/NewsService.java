@@ -67,4 +67,5 @@ public interface NewsService {
      * @return
      */
     boolean addNewsIndex(Integer news_id);
+    int  queryNewsCount();
 }

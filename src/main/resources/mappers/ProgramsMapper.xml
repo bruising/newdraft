@@ -79,4 +79,8 @@
             <result column="links"/>
         </collection>
     </resultMap>
+
+    <select id="queryProgramsCount"  resultType="int">
+        SELECT COUNT(*) FROM `programs`;
+    </select>
 </mapper>

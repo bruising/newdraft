@@ -38,4 +38,10 @@ public interface ProgramsMapper {
      * @return 执行结果
      */
     int deleteProgramById(@Param("programId") String programId);
+
+    /***
+     * 查询项目数
+     * @return
+     */
+    int  queryProgramsCount();
 }

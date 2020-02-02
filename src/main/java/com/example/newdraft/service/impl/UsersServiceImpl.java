@@ -98,6 +98,17 @@ public class UsersServiceImpl implements UsersService {
         return usersMapper.queryAdministrator();
     }
 
+    @Override
+    public int queryBusinessCount() {
+        return usersMapper.queryBusinessCount();
+    }
+
+    @Override
+    public int queryUserCount() {
+        return usersMapper.queryUserCount();
+    }
+
+
     //存放token
     private void saveToken(Users user1, String token) {
         String tokenKey="User"+user1.getId();

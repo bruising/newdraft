@@ -73,4 +73,10 @@ public interface NewsMapper {
      * @return
      */
     int updateNewsIndex(@Param("news_id") Integer news_id);
+
+    /**
+     * 查询新闻的总数
+     * @return
+     */
+    int  queryNewsCount();
 }

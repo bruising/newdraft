@@ -79,4 +79,9 @@ public class ProgramsServiceImpl implements ProgramsService {
         return message;
     }
 
+    @Override
+    public int queryProgramsCount() {
+        return programsMapper.queryProgramsCount();
+    }
+
 }
