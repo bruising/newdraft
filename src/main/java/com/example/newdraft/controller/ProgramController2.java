@@ -1,12 +1,10 @@
 package com.example.newdraft.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.example.newdraft.model.vo.Message;
 import com.example.newdraft.service.ProgramsService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +34,7 @@ public class ProgramController2 {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "programTitle", value = "项目标题", dataType = "String", example = "xx"),
             @ApiImplicitParam(name = "country", value = "项目所属国家", dataType = "String", example = "xx(国家全称， 例：法国)"),
+            @ApiImplicitParam(name = "programStatus", value = "项目当前状态", dataType = "String", example = "1"),
             @ApiImplicitParam(name = "page",value = "当前页",dataType = "String",example = "1"),
             @ApiImplicitParam(name = "limit",value = "每页显示的新闻数量",dataType = "String",example = "5")
     })
@@ -46,8 +45,9 @@ public class ProgramController2 {
     public String searchPrograms(
             @RequestParam(value = "programTitle", required = false, defaultValue = "") String programTitle,
             @RequestParam(value = "country", required = false, defaultValue = "") String country,
-            @RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
-            @RequestParam(value = "page",required = false,defaultValue = "1") Integer page){
+            @RequestParam(value = "programStatus", required = false, defaultValue = "1") Integer programStatus,
+            @RequestParam(value = "limit",required = false,defaultValue = "0") Integer limit,
+            @RequestParam(value = "page",required = false,defaultValue = "0") Integer page){
         Map<String, Object> map = new HashMap<>();
         if (programTitle!=""){
             map.put("programTitle", programTitle);
@@ -55,10 +55,11 @@ public class ProgramController2 {
         if (country!=""){
             map.put("country", country);
         }
+        if (programStatus>0){
+            map.put("programStatus", programStatus);
+        }
         map.put("limit", limit);
         map.put("page", page);
-        System.out.println(limit);
-        System.out.println(page);
         return JSON.toJSONString(programsService.searchPrograms(map));
     }
 
@@ -77,7 +78,7 @@ public class ProgramController2 {
         return JSON.toJSONString(programsService.searchProgramInfo(programId));
     }
 
-    @PostMapping(value = "/deleteProgramById")
+    @RequestMapping(value = "/deleteProgramById")
     @ResponseBody
     @ApiOperation(value = "删除项目", notes = "根据项目ID下架该项目")
     @ApiImplicitParams({
@@ -87,8 +88,8 @@ public class ProgramController2 {
             @ApiResponse(code = 200, message = "下架项目成功"),
             @ApiResponse(code = 123, message = "下架项目失败")
     })
-    public Message deleteProgramById(
+    public String deleteProgramById(
             @RequestParam(value = "programId", required = false, defaultValue = "") String programId){
-        return programsService.deleteProgramById(programId);
+        return JSON.toJSONString(programsService.deleteProgramById(programId));
     }
 }

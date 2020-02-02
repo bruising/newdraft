@@ -1,7 +1,6 @@
 package com.example.newdraft.service;
 
 import com.example.newdraft.model.pojo.Programs;
-import com.example.newdraft.model.vo.Message;
 
 import java.util.Map;
 
@@ -30,7 +29,5 @@ public interface ProgramsService {
      * @param programId 项目ID
      * @return 执行结果
      */
-    Message deleteProgramById(String programId);
-
-    int  queryProgramsCount();
+    Map<String, Object> deleteProgramById(String programId);
 }

@@ -29,15 +29,22 @@
     <!--  ==========分隔线==========  -->
 
     <select id="searchPrograms" resultMap="programs">
-        SELECT * FROM programs WHERE program_status = 1
-        <if test="programTitle!=null and programTitle!=''">
-            AND program_title LIKE '%${programTitle}%'
-        </if>
-        <if test="country!=null and country!=''">
-            AND country LIKE '%${country}%'
-        </if>
+        SELECT * FROM programs
+        <where>
+            <if test="programStatus!=null and programStatus>0">
+                AND program_status = #{programStatus}
+            </if>
+            <if test="programTitle!=null and programTitle!=''">
+                AND program_title LIKE '%${programTitle}%'
+            </if>
+            <if test="country!=null and country!=''">
+                AND country LIKE '%${country}%'
+            </if>
+        </where>
         ORDER BY program_level DESC
-        LIMIT #{index}, #{limit}
+        <if test="index!=null and index>0">
+            LIMIT #{index}, #{limit}
+        </if>
     </select>
 
     <select id="searchProgramInfo" resultMap="programsVo">
