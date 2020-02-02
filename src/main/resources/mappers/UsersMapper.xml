@@ -83,4 +83,11 @@
     <select id="queryAdministrator"  resultMap="users">
           SELECT * FROM `users`  WHERE  user_role=5;
     </select>
+
+    <select id="queryUserCount"  resultType="int">
+        SELECT COUNT(*) FROM `users`  WHERE  user_role=1;
+    </select>
+    <select id="queryBusinessCount"  resultType="int">
+        SELECT COUNT(*) FROM `users`  WHERE  user_role=2;
+    </select>
 </mapper>

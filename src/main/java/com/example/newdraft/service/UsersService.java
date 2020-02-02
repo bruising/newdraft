@@ -40,4 +40,6 @@ public interface UsersService {
      * @return
      */
     List<Users> queryAdministrator();
+    int  queryUserCount();
+    int   queryBusinessCount();
 }
