@@ -18,7 +18,7 @@ public interface ProgramsService {
      * @param map 查询条件（项目名称模糊查询、国家名）
      * @return
      */
-    Message searchPrograms(Map<String, Object> map);
+    Map<String, Object> searchPrograms(Map<String, Object> map);
     /**
      * 项目详情页
      * @param programId 项目ID

@@ -23,6 +23,8 @@ public interface ProgramsMapper {
      */
     List<Programs> searchPrograms(Map<String, Object> map);
 
+    Long selectAllProgramsCount();
+
     /**
      * 项目详情页
      * @param programId 项目ID
