@@ -36,6 +36,8 @@
         <if test="country!=null and country!=''">
             AND country LIKE '%${country}%'
         </if>
+        ORDER BY program_level DESC
+        LIMIT #{index}, #{limit}
     </select>
 
     <select id="searchProgramInfo" resultMap="programsVo">
@@ -47,6 +49,16 @@
             AND p.program_id = #{programId}
         </if>
         GROUP BY mpf.project_id
+    </select>
+
+    <select id="selectAllProgramsCount" resultType="java.lang.Long">
+        SELECT COUNT(program_id) FROM programs WHERE program_status = 1
+        <if test="programTitle!=null and programTitle!=''">
+            AND program_title LIKE '%${programTitle}%'
+        </if>
+        <if test="country!=null and country!=''">
+            AND country LIKE '%${country}%'
+        </if>
     </select>
 
     <update id="deleteProgramById">

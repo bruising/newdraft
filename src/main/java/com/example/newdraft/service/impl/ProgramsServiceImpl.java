@@ -1,6 +1,5 @@
 package com.example.newdraft.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.example.newdraft.mapper.ProgramsMapper;
 import com.example.newdraft.model.pojo.Programs;
 import com.example.newdraft.model.vo.Message;
@@ -35,37 +34,35 @@ public class ProgramsServiceImpl implements ProgramsService {
     }
 
     @Override
-    public Message searchPrograms(Map<String, Object> map) {
+    public Map<String, Object> searchPrograms(Map<String, Object> map) {
+        //默认值
+        map.put("count",0);
+        int page=Integer.parseInt(map.get("page").toString());
+        int limit=Integer.parseInt(map.get("limit").toString());
+        int index=(page-1)*limit;
+        map.put("index",index);
         List<Programs> programs = programsMapper.searchPrograms(map);
-        Message message = new Message();
-        if (programs!=null && programs.size()>0){
-            message.setCode("200");
-            message.setMsg("查询成功");
-            message.setData(JSON.toJSONString(programs));
+        long num = programsMapper.selectAllProgramsCount();
+        if(num>0){
+            map.put("data",programs);
+            map.put("count",num);
+            map.put("code", 200);
         }else {
-            message.setCode("123");
-            message.setMsg("未查询到符合条件的项目");
+            map.put("code", 123);
         }
-        return message;
+        return map;
     }
 
     @Override
     public Map<String, Object> searchProgramInfo(String programId) {
         ProgramsVo program = programsMapper.searchProgramInfo(programId);
-//        Message message = new Message();
         Map<String, Object> map = new HashMap<>();
         if (program!=null){
-//            message.setCode("200");
-//            message.setMsg("查询成功");
-//            message.setData(JSON.toJSONString(program));
             map.put("code", 200);
             map.put("data", program);
         }else {
             map.put("code", 123);
-//            message.setCode("123");
-//            message.setMsg("未查询到项目详情");
         }
-//        return message;
         return map;
     }
 
