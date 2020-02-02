@@ -21,6 +21,12 @@ public interface UsersService {
      */
     Map<String,Object> queryUsersByPhoneAndPassword(Users users,String type);
 
+    /**
+     * 前台登录
+     * @param users
+     * @return
+     */
+    Map<String,Object> frontQueryUsersByPhoneAndPassword(Users users,String type);
 
     /**
      * 后台用户和商家列表
@@ -40,4 +46,11 @@ public interface UsersService {
      * @return
      */
     List<Users> queryAdministrator();
+
+    /**
+     * 前台短信登录
+     * @param phone
+     * @return
+     */
+    Map<String,Object> frontQueryUsersByPhone(String phone,String type);
 }

@@ -49,6 +49,23 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public Map<String, Object> frontQueryUsersByPhoneAndPassword(Users users, String type) {
+        Map<String,Object>map=new HashMap<>();
+        map.put("msg","failed");
+        map.put("code",4);
+        Users user1 = usersMapper.frontSelectUsersByPhoneAndPassword(users);
+        if(user1!=null){
+            map.put("code",0);
+            map.put("msg","success");
+            map.put("data",user1);
+            String token = this.createToken(user1, type);
+            map.put("token",token);
+            this.saveToken(user1,token);
+        }
+        return map;
+    }
+
+    @Override
     public Map<String, Object> queryUsersList(Map<String, Object> map) {
         Map<String,Object>statusMap=new HashMap<String, Object>();
         statusMap.put("code",0);
@@ -96,6 +113,23 @@ public class UsersServiceImpl implements UsersService {
 
 
         return usersMapper.queryAdministrator();
+    }
+
+    @Override
+    public Map<String, Object> frontQueryUsersByPhone(String phone,String type) {
+        Map<String,Object>map=new HashMap<>();
+        map.put("msg","failed");
+        map.put("code",4);
+        Users user1 = usersMapper.selectUsersByPhone(phone);
+        if(user1!=null){
+            map.put("code",0);
+            map.put("msg","success");
+            map.put("data",user1);
+            String token = this.createToken(user1, type);
+            map.put("token",token);
+            this.saveToken(user1,token);
+        }
+        return map;
     }
 
     //存放token

@@ -12,7 +12,6 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.model.DefaultPutRet;
 import cz.mallat.uasparser.UserAgentInfo;
 import io.swagger.annotations.*;
-import org.apache.catalina.User;
 import org.apache.http.HttpResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -88,7 +87,7 @@ public class UsersController {
         map.put("code",4);
         map.put("msg","failed");
         if(decentUtil.status(response)){
-           redisUtils.set(phone,code,60);
+           redisUtils.set(phone,code,120);
             map.put("code",0);
             map.put("msg","success");
            return  JSON.toJSONString(map);
@@ -252,4 +251,59 @@ public class UsersController {
         return   JSON.toJSONString(map);
     }
 
+    /**
+     * 前台判断是否登录
+     * @param token
+     * @return
+     */
+    @RequestMapping("/isLogin")
+    @ResponseBody
+    public String isLogin(String token){
+        Map<String,Object>map=new HashMap<>();
+        System.out.println(token);
+        map.put("data",redisUtils.get(token));
+        return JSON.toJSONString(map);
+    }
+
+    @ApiOperation(value = "输入电话密码验证登录信息",notes = "正确返回用户信息，错误返回错误码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userPhone",value = "手机号",dataType = "String",example = "19919990911"),
+            @ApiImplicitParam(name="userPassword",value = "密码",type = "String",example = "123456")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 4,message = "failed"),
+            @ApiResponse(code = 0,message = "success")
+    })
+    @RequestMapping(value = "/frontLogin",method = RequestMethod.POST)
+    @ResponseBody
+    public String frontLogin(Users users, HttpServletRequest request)throws Exception{
+        String header = request.getHeader("User-Agent");
+        System.err.println(users);
+        UserAgentInfo parse = userAgentUtil.uaSparser.parse(header);
+        String type = parse.getDeviceType();
+        Map<String, Object> map = usersService.frontQueryUsersByPhoneAndPassword(users, type);
+        return JSON.toJSONString(map);
+    }
+
+
+    @RequestMapping(value = "/frontPhoneLogin",method = RequestMethod.POST)
+    @ResponseBody
+    public String frontPhoneLogin(String phone,String code,HttpServletRequest request)throws Exception{
+        Object tokencode = redisUtils.get(phone);
+        Map<String,Object>map1=new HashMap<>();
+        map1.put("code",2004);//失败
+        if(tokencode.toString().equals(code)){
+            System.out.println("验证码正确");
+            String header = request.getHeader("User-Agent");
+            UserAgentInfo parse = userAgentUtil.uaSparser.parse(header);
+            String type = parse.getDeviceType();
+            Map<String, Object> map = usersService.frontQueryUsersByPhone(phone, type);
+            Object code1 = map.get("code");
+            if(code1.toString().equals("0")){
+                map1.put("code",2001);//成功
+                map1.put("map",map);
+            }
+        }
+        return JSON.toJSONString(map1);
+    }
 }

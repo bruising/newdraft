@@ -39,4 +39,12 @@ public interface UsersMapper {
      * @return
      */
     List<Users>queryAdministrator();
+
+    Users frontSelectUsersByPhoneAndPassword(Users users);
+    /**
+     * 电话登录
+     * @param phone
+     * @return
+     */
+    Users selectUsersByPhone(@Param("phone") String phone);
 }
