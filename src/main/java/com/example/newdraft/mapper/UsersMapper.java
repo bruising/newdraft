@@ -39,16 +39,4 @@ public interface UsersMapper {
      * @return
      */
     List<Users>queryAdministrator();
-
-    /**
-     * 查询商家个数
-     * @return
-     */
-    int  queryBusinessCount();
-
-    /**
-     * 查询用户个数
-     * @return
-     */
-    int  queryUserCount();
 }

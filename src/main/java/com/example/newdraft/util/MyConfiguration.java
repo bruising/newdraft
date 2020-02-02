@@ -3,6 +3,7 @@ package com.example.newdraft.util;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -21,6 +22,16 @@ public class MyConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**");
+            }
+
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(new MyInterceptor())
+                        //要拦截的地址  如果全部拦截就用 "/**"
+                        .addPathPatterns("/isLogin");
+                        //不需要拦截的地址
+//                        .excludePathPatterns("")
+//                        .excludePathPatterns("");
             }
         };
     }

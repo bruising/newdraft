@@ -169,9 +169,7 @@ public class UsersController {
             if(usersService.del(id)){
                 message.setCode("0");
                 message.setMsg("success");
-                System.out.println("删除成功");
             }else{
-                System.out.println("删除失败");
                 message.setCode("4");
                 message.setMsg("failed");
             }
@@ -253,6 +251,5 @@ public class UsersController {
         System.out.println(administrator);
         return   JSON.toJSONString(map);
     }
-
 
 }
