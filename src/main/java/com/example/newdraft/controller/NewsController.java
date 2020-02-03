@@ -5,6 +5,8 @@ import com.example.newdraft.model.pojo.News;
 import com.example.newdraft.model.vo.Message;
 import com.example.newdraft.model.vo.NewsList;
 import com.example.newdraft.service.NewsService;
+import com.example.newdraft.service.ProgramsService;
+import com.example.newdraft.service.UsersService;
 import com.example.newdraft.util.QNYUtils;
 import com.example.newdraft.util.RedisUtils;
 import com.qiniu.http.Response;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +25,10 @@ import java.util.Map;
 public class NewsController {
     @Resource
     private NewsService newsService;
+    @Resource
+    private ProgramsService  programsService;
+    @Resource
+    private UsersService  usersService;
     @Resource
     private QNYUtils qnyUtils;
     @Resource
@@ -327,6 +334,26 @@ public class NewsController {
                 message.setMsg("failed");
             }
         return JSON.toJSONString(message);
+    }
+
+    /**
+     * 欢迎页需要展示得内容
+     * @return
+     */
+        @RequestMapping(value = "/welcome")
+    @ResponseBody
+    public   String welcome (){
+            System.out.println("welcome访问了");
+        Map<String,Object>map=new HashMap<>();
+        int  newsCounts= newsService.queryNewsCount();//查询新闻得总数
+        int  BusinessCount=usersService.queryBusinessCount();//查询商家得总数
+        int  userCount= usersService.queryUserCount();//查询用户数
+        int   programsCount=programsService.queryProgramsCount(); //查询项目数
+        map.put("newsCounts",newsCounts);
+        map.put("BusinessCount",BusinessCount);
+        map.put("userCount",userCount);
+        map.put("programsCount",programsCount);
+        return JSON.toJSONString(map);
     }
 }
 
