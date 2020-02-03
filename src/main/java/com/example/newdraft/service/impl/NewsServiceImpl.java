@@ -108,4 +108,9 @@ public class NewsServiceImpl implements NewsService {
         }
         return false;
     }
+
+    @Override
+    public int queryNewsCount() {
+        return newsMapper.queryNewsCount();
+    }
 }

@@ -21,9 +21,9 @@ public interface ProgramsMapper {
      * @param map 查询条件（项目名称模糊查询、国家名）
      * @return
      */
-    List<Programs> searchPrograms(Map<String, Object> map);
+    List<Programs> searchPrograms(@Param("map")Map<String, Object> map);
 
-    Long selectAllProgramsCount();
+    Long selectAllProgramsCount(@Param("map")Map<String, Object> map);
 
     /**
      * 项目详情页
@@ -38,4 +38,6 @@ public interface ProgramsMapper {
      * @return 执行结果
      */
     int deleteProgramById(@Param("programId") String programId);
+
+    int queryProgramsCount();
 }

@@ -47,4 +47,8 @@ public interface UsersMapper {
      * @return
      */
     Users selectUsersByPhone(@Param("phone") String phone);
+
+    int queryUserCount();
+
+    int queryBusinessCount();
 }

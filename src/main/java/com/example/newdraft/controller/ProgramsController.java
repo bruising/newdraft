@@ -39,17 +39,17 @@ public class ProgramsController {
             @ApiResponse(code = 4,message = "failed"),
             @ApiResponse(code = 0,message = "success")
     })
-    public Message doAddPrograms(Programs programs){
-        Message message = new Message();
+    public String doAddPrograms(Programs programs){
+        Map<String,Object>map=new HashMap<>();
         int num = programsService.addPrograms(programs);
-        if(num==1){
-            message.setCode("4");
-            message.setMsg("failed");
+        if(num>1){
+            map.put("msg","failed");
+            map.put("code",4);
         }else{
-            message.setCode("0");
-            message.setMsg("success");
+            map.put("msg","success");
+            map.put("code",0);
         }
-        return message;
+        return JSON.toJSONString(map);
     }
 
     @RequestMapping(value = "/doUpdateProgram",method = RequestMethod.POST)
@@ -69,17 +69,18 @@ public class ProgramsController {
             @ApiResponse(code = 4,message = "failed"),
             @ApiResponse(code = 0,message = "success")
     })
-    public Message doUpdatePrograms(Programs programs){
-        Message message = new Message();
+    public String doUpdatePrograms(Programs programs){
+        Map<String,Object>map=new HashMap<>();
+        System.out.println(programs);
         int num = programsService.updatePrograms(programs);
-        if(num==1){
-            message.setCode("4");
-            message.setMsg("failed");
+        if(num>1){
+            map.put("msg","failed");
+            map.put("code",4);
         }else{
-            message.setCode("0");
-            message.setMsg("success");
+            map.put("msg","success");
+            map.put("code",0);
         }
-        return message;
+        return JSON.toJSONString(map);
     }
 
     @RequestMapping(value = "/getProgramsById",method = RequestMethod.POST)

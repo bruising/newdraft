@@ -1,7 +1,6 @@
 package com.example.newdraft.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.example.newdraft.model.vo.Message;
 import com.example.newdraft.service.ProgramsService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +48,10 @@ public class ProgramController2 {
             @RequestParam(value = "limit",required = false,defaultValue = "5") Integer limit,
             @RequestParam(value = "page",required = false,defaultValue = "1") Integer page){
         Map<String, Object> map = new HashMap<>();
-        if (programTitle!=""){
-            map.put("programTitle", programTitle);
-        }
-        if (country!=""){
-            map.put("country", country);
-        }
+        map.put("programTitle", programTitle);
+        map.put("country", country);
         map.put("limit", limit);
         map.put("page", page);
-        System.out.println(limit);
-        System.out.println(page);
         return JSON.toJSONString(programsService.searchPrograms(map));
     }
 
@@ -87,8 +80,9 @@ public class ProgramController2 {
             @ApiResponse(code = 200, message = "下架项目成功"),
             @ApiResponse(code = 123, message = "下架项目失败")
     })
-    public Message deleteProgramById(
+    public String deleteProgramById(
             @RequestParam(value = "programId", required = false, defaultValue = "") String programId){
-        return programsService.deleteProgramById(programId);
+        return JSON.toJSONString(programsService.deleteProgramById(programId));
+
     }
 }

@@ -132,6 +132,16 @@ public class UsersServiceImpl implements UsersService {
         return map;
     }
 
+    @Override
+    public int queryUserCount() {
+        return usersMapper.queryUserCount();
+    }
+
+    @Override
+    public int queryBusinessCount() {
+        return usersMapper.queryBusinessCount();
+    }
+
     //存放token
     private void saveToken(Users user1, String token) {
         String tokenKey="User"+user1.getId();

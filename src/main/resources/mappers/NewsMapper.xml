@@ -91,6 +91,8 @@
     <update id="updateNewsIndex">
         update news set news_index=news_index+1 where news_id=#{news_id}
     </update>
-
+    <select id="queryNewsCount"  resultType="int">
+    SELECT COUNT(*) FROM `news`
+</select>
 
 </mapper>

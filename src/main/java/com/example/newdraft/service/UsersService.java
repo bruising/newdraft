@@ -53,4 +53,8 @@ public interface UsersService {
      * @return
      */
     Map<String,Object> frontQueryUsersByPhone(String phone,String type);
+
+    int queryBusinessCount();
+
+    int queryUserCount();
 }

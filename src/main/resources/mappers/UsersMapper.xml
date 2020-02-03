@@ -93,5 +93,10 @@
         <include refid="user"/>
         FROM users WHERE user_phone=#{phone} AND user_status='1'and user_role in (1,2)
     </select>
-
+    <select id="queryUserCount"  resultType="int">
+    SELECT COUNT(*) FROM `users`  WHERE  user_role=1;
+</select>
+    <select id="queryBusinessCount"  resultType="int">
+    SELECT COUNT(*) FROM `users`  WHERE  user_role=2;
+</select>
 </mapper>

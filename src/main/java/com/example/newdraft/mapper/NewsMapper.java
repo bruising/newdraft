@@ -73,4 +73,6 @@ public interface NewsMapper {
      * @return
      */
     int updateNewsIndex(@Param("news_id") Integer news_id);
+
+    int queryNewsCount();
 }
